@@ -6,6 +6,10 @@
 package Vista;
 
 import Controlador.CtrlVistas;
+import Modelo.Jugador;
+import Modelo.Sala;
+import SocketCliente.SocketCliente;
+import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -36,16 +40,16 @@ public class Vista {
         // Usar ActionListener para el botón "Ingresar" y "Salir".
     }
 
-    public void showPantallaRegistro() {
+    public void showPantallaRegistro(SocketCliente socketCliente) {
         // Implementar la pantalla de registro aquí.
-        FrmRegistro registro=new FrmRegistro();
+        FrmRegistro registro=new FrmRegistro(socketCliente);
         registro.setVisible(true);
         // Usar ActionListener para el botón "Ingresar".
     }
 
-    public void showPantallaMenu() {
+    public void showPantallaMenu(SocketCliente socketCliente) {
         // Implementar la pantalla de menú aquí.
-        FrmMenu menu=new FrmMenu();
+        FrmMenu menu=new FrmMenu(socketCliente);
         menu.setVisible(true);
         // Usar ActionListener para las opciones del menú.
     }
@@ -54,13 +58,13 @@ public class Vista {
         JOptionPane.showMessageDialog(frame, mensaje);
     }
     
-    public void showPantallaSala(){
-        FrmSala sala=new FrmSala();
-        sala.setVisible(true);
+    public void showPantallaSala(Sala sala, SocketCliente socketCliente){
+        FrmSala pantallaSala=new FrmSala(sala, socketCliente);
+        pantallaSala.setVisible(true);
     }
     
-    public void showPartida(){
-        FrmPartida partida=new FrmPartida();
+    public void showPartida(List<Jugador> jugadores, SocketCliente socketCliente){
+        FrmPartida partida=new FrmPartida(jugadores, socketCliente);
         partida.setVisible(true);
     }
 }

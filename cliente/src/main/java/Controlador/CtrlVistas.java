@@ -5,8 +5,12 @@
  */
 package Controlador;
 
+import Modelo.Jugador;
 import Modelo.Modelo;
+import Modelo.Sala;
+import SocketCliente.SocketCliente;
 import Vista.Vista;
+import java.util.List;
 
 
 /**
@@ -25,32 +29,28 @@ public class CtrlVistas {
     public void startApplication() {
         vista.showPantallaInicio();
     }
-
-    public void validarRegistro(String nombreUsuario, String avatarSeleccionado, String colorSeleccionado) {
-        // Implementar la validación y lógica aquí.
-        if (/* Validación exitosa */true) {
-            modelo.setUsuario(nombreUsuario);
-            modelo.setAvatar(avatarSeleccionado);
-            modelo.setColor(colorSeleccionado);
-            vista.showPantallaMenu();
-        } else {
-            vista.mostrarMensajeError("Por favor complete todos los campos.");
-        }
+    
+    public void showRegistro(SocketCliente socketCliente){
+        vista.showPantallaRegistro(socketCliente);
     }
     
-    public void showRegistro(){
-        vista.showPantallaRegistro();
+    public void showMenu(SocketCliente socketCliente){
+        vista.showPantallaMenu(socketCliente);
     }
     
-    public void showMenu(){
-        vista.showPantallaMenu();
-    }
-    
-    public void crearSala(){
-        vista.showPantallaSala();
+    public Sala crearSalaPublica(){
+        return modelo.crearSalaPublica();
     }
 
-    public void iniciarJuego(){
-        vista.showPartida();
+    public void iniciarJuego(List<Jugador> jugadores, SocketCliente socketCliente){
+        vista.showPartida(jugadores, socketCliente);
+    }
+    
+    public Sala crearSalaPrivada(){
+        return modelo.crearSalaPrivada();
+    }
+    
+    public void mostrarSala(Sala sala, SocketCliente socketCliente){
+        vista.showPantallaSala(sala, socketCliente);
     }
 }

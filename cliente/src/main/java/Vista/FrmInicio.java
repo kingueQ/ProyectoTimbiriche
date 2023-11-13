@@ -1,24 +1,30 @@
 package Vista;
 
 import Controlador.CtrlVistas;
+import SocketCliente.SocketCliente;
+import java.awt.Color;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author kingu
  */
 public class FrmInicio extends javax.swing.JFrame {
 
+    SocketCliente socketCliente;
+
     /**
      * Creates new form FrmInicio
      */
     public FrmInicio() {
         initComponents();
+
+        this.getContentPane().setBackground(Color.BLACK);
+        socketCliente = new SocketCliente();
     }
 
     /**
@@ -93,18 +99,23 @@ public class FrmInicio extends javax.swing.JFrame {
 
     private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
         // TODO add your handling code here:
-        CtrlVistas controlador=new CtrlVistas();
-        controlador.showRegistro();
+        CtrlVistas controlador = new CtrlVistas();
+        controlador.showRegistro(this.socketCliente);
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_btnIngresarActionPerformed
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
         // TODO add your handling code here:
+        if (this.socketCliente != null) {
+            this.socketCliente.cerrarConexion();
+        } else {
+            System.out.println("La conexión ya es nula.");
+        }
+        
+        System.exit(0);
     }//GEN-LAST:event_btnSalirActionPerformed
 
-    
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnIngresar;

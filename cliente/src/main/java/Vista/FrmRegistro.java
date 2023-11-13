@@ -6,6 +6,22 @@
 package Vista;
 
 import Controlador.CtrlVistas;
+import Modelo.Avatar;
+import Modelo.Colores;
+import Modelo.Jugador;
+import SocketCliente.SocketCliente;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Image;
+import java.util.HashMap;
+import java.util.Map;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.ListCellRenderer;
 
 /**
  *
@@ -13,11 +29,22 @@ import Controlador.CtrlVistas;
  */
 public class FrmRegistro extends javax.swing.JFrame {
 
+    private Avatar avatar;
+    CtrlVistas controlador = new CtrlVistas();
+    private SocketCliente socketCliente;
+
     /**
      * Creates new form FrmRegistro
      */
-    public FrmRegistro() {
+    public FrmRegistro(SocketCliente socketCliente) {
         initComponents();
+
+        this.getContentPane().setBackground(Color.BLACK);
+        avatar = new Avatar();
+        llenarComboBoxAvatar();
+        llenarComboBoxColores();
+
+        this.socketCliente = socketCliente;
     }
 
     /**
@@ -34,10 +61,10 @@ public class FrmRegistro extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         txtUsuario = new javax.swing.JTextField();
-        cbxColor = new javax.swing.JComboBox<>();
         cbxAvatar = new javax.swing.JComboBox<>();
         btnRegresar = new javax.swing.JButton();
         btnIngresar = new javax.swing.JButton();
+        cbxColor = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -56,8 +83,6 @@ public class FrmRegistro extends javax.swing.JFrame {
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(0, 51, 255));
         jLabel4.setText("Avatar:");
-
-        cbxColor.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Azul", "Rojo", "Verde", "Amarillo" }));
 
         cbxAvatar.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Perro", "Gato", "Pescado", "Paloma" }));
 
@@ -79,6 +104,9 @@ public class FrmRegistro extends javax.swing.JFrame {
             }
         });
 
+        cbxColor.setBackground(new java.awt.Color(0, 0, 0));
+        cbxColor.setForeground(new java.awt.Color(255, 255, 255));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -95,9 +123,9 @@ public class FrmRegistro extends javax.swing.JFrame {
                         .addGap(47, 47, 47)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cbxColor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(cbxAvatar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnIngresar)))
+                            .addComponent(btnIngresar)
+                            .addComponent(cbxColor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(36, 36, 36)
                         .addComponent(jLabel1)))
@@ -133,7 +161,6 @@ public class FrmRegistro extends javax.swing.JFrame {
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
         // TODO add your handling code here:
-        CtrlVistas controlador=new CtrlVistas();
         controlador.startApplication();
         this.setVisible(false);
         this.dispose();
@@ -141,13 +168,88 @@ public class FrmRegistro extends javax.swing.JFrame {
 
     private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
         // TODO add your handling code here:
-        CtrlVistas controlador=new CtrlVistas();
-        controlador.showMenu();
-        this.setVisible(false);
-        this.dispose();
+        String nombreUsuario = this.txtUsuario.getText();
+        String avatarSeleccionado = (String) this.cbxAvatar.getSelectedItem();
+        String colorSeleccionado = (String) this.cbxColor.getSelectedItem();
+        
+        String mensaje = nombreUsuario + "," + avatarSeleccionado + "," + colorSeleccionado;
+        System.out.println("Mensaje enviado al servidor: " + mensaje);
+        String respuestaServidor = socketCliente.validarRegistro(nombreUsuario, avatarSeleccionado, colorSeleccionado);
+        if ("OK".equals(respuestaServidor)) {
+            this.socketCliente.setJugador(new Jugador(nombreUsuario, avatarSeleccionado, Colores.getColor(colorSeleccionado)));
+            controlador.showMenu(this.socketCliente);
+            this.setVisible(false);
+            this.dispose();
+        } else if ("DUPLICADO".equals(respuestaServidor)) {
+            // Muestra un mensaje o realiza alguna acción en caso de nombre de usuario duplicado
+            // Puedes agregar un JLabel o JOptionPane para informar al usuario.
+            JOptionPane.showMessageDialog(this, "Ese nombre del usuario ya se encuentra registrado, por favor elija otro");
+            this.socketCliente.cerrarConexion();
+            this.socketCliente=new SocketCliente();
+        }
     }//GEN-LAST:event_btnIngresarActionPerformed
 
-    
+    private void llenarComboBoxAvatar() {
+        // Configura el ComboBox con un nuevo modelo
+        cbxAvatar.setModel(new DefaultComboBoxModel<>(avatar.getNombres()));
+
+        // Establece un renderer personalizado para mostrar imágenes en lugar de texto
+        cbxAvatar.setRenderer(new ImageComboBoxRenderer());
+    }
+
+    private class ImageComboBoxRenderer extends JLabel implements ListCellRenderer<Object> {
+
+        private static final int ICON_WIDTH = 50; // Ajusta el ancho de la imagen según tus preferencias
+        private static final int ICON_HEIGHT = 50; // Ajusta el alto de la imagen según tus preferencias
+
+        @Override
+        public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+            // Obtiene el nombre de la constante
+            String nombre = (String) value;
+
+            // Crea un ImageIcon a partir de la dirección de la imagen y ajusta su tamaño
+            ImageIcon icono = new ImageIcon(getClass().getResource(nombre));
+            Image imagenRedimensionada = icono.getImage().getScaledInstance(ICON_WIDTH, ICON_HEIGHT, Image.SCALE_SMOOTH);
+            ImageIcon iconoRedimensionado = new ImageIcon(imagenRedimensionada);
+
+            // Configura el JLabel para mostrar la imagen redimensionada
+            setIcon(iconoRedimensionado);
+            setText("");  // Oculta el texto
+
+            // Establece el fondo y la selección según sea necesario
+            setBackground(isSelected ? list.getSelectionBackground() : list.getBackground());
+            setForeground(isSelected ? list.getSelectionForeground() : list.getForeground());
+
+            return this;
+        }
+
+    }
+
+    private void llenarComboBoxColores() {
+        // Configura el ComboBox con un nuevo modelo que acepta objetos String
+        DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(Colores.getNombresColores());
+        cbxColor.setModel(model);
+
+        // Agrega el ListCellRenderer personalizado
+        cbxColor.setRenderer(new ColorComboBoxRenderer());
+    }
+
+    private class ColorComboBoxRenderer extends DefaultListCellRenderer {
+
+        @Override
+        public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+            JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            String colorNombre = (String) value;
+
+            // Configura el color del texto según la opción seleccionada
+            Color color = Colores.getColor(colorNombre);
+            if (color != null) {
+                label.setForeground(color);
+            }
+
+            return label;
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnIngresar;

@@ -5,7 +5,13 @@
  */
 package Vista;
 
+import Controlador.CtrlJuego;
 import Controlador.CtrlVistas;
+import Modelo.Jugador;
+import Modelo.TableroPanel;
+import SocketCliente.SocketCliente;
+import java.awt.Color;
+import java.util.List;
 
 /**
  *
@@ -13,11 +19,23 @@ import Controlador.CtrlVistas;
  */
 public class FrmPartida extends javax.swing.JFrame {
 
+    CtrlJuego ctrlJuego=new CtrlJuego();
+    List<Jugador> jugadores;
+    SocketCliente socketCliente;
     /**
      * Creates new form Partida
      */
-    public FrmPartida() {
+    public FrmPartida(List<Jugador> jugadores, SocketCliente socketCliente) {
+        this.jugadores=jugadores;
+        this.socketCliente=socketCliente;
+        char[][] tablero=ctrlJuego.obtenerTablero(jugadores.size());
+        
         initComponents();
+        
+        this.getContentPane().setBackground(Color.BLACK);
+        
+        TableroPanel tableroPanel = new TableroPanel(tablero);
+        add(tableroPanel);
     }
 
     /**
@@ -148,7 +166,7 @@ public class FrmPartida extends javax.swing.JFrame {
     private void btnAbandonarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAbandonarActionPerformed
         // TODO add your handling code here:
         CtrlVistas controlador=new CtrlVistas();
-        controlador.showMenu();
+        controlador.showMenu(this.socketCliente);
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_btnAbandonarActionPerformed

@@ -5,6 +5,7 @@
  */
 package Modelo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,15 +17,18 @@ public class Sala {
     private List<Jugador> jugadores;
     private int numJugadores;
     private int disponibilidad;
+    private boolean publica;
 
     public Sala() {
+        jugadores=new ArrayList<>();
     }
 
-    public Sala(String codigo, List<Jugador> jugadores, int numJugadores, int disponibilidad) {
+    public Sala(String codigo, List<Jugador> jugadores, int numJugadores, int disponibilidad, boolean publica) {
         this.codigo = codigo;
         this.jugadores = jugadores;
         this.numJugadores = numJugadores;
         this.disponibilidad = disponibilidad;
+        this.publica=publica;
     }
 
     public String getCodigo() {
@@ -58,6 +62,20 @@ public class Sala {
     public void setDisponibilidad(int disponibilidad) {
         this.disponibilidad = disponibilidad;
     }
+
+    public boolean isPublica() {
+        return publica;
+    }
+
+    public void setPublica(boolean publica) {
+        this.publica = publica;
+    }
     
+    public void añadirJugador(Jugador jugador){
+        this.jugadores.add(jugador);
+    }
     
+    public void eliminarJugador(Jugador jugador){
+        this.jugadores.remove(jugador);
+    }
 }

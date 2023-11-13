@@ -6,6 +6,9 @@
 package Vista;
 
 import Controlador.CtrlVistas;
+import Modelo.Sala;
+import SocketCliente.SocketCliente;
+import java.awt.Color;
 
 /**
  *
@@ -13,11 +16,17 @@ import Controlador.CtrlVistas;
  */
 public class FrmMenu extends javax.swing.JFrame {
 
+    CtrlVistas ctrlVistas = new CtrlVistas();
+    SocketCliente socketCliente;
+    
     /**
      * Creates new form FrmMenu
      */
-    public FrmMenu() {
+    public FrmMenu(SocketCliente socketCliente) {
         initComponents();
+
+        this.getContentPane().setBackground(Color.BLACK);
+        this.socketCliente=socketCliente;
     }
 
     /**
@@ -106,29 +115,51 @@ public class FrmMenu extends javax.swing.JFrame {
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
         // TODO add your handling code here:
-        CtrlVistas controlador=new CtrlVistas();
-        controlador.startApplication();
+        ctrlVistas.startApplication();
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_btnRegresarActionPerformed
 
     private void btnCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearActionPerformed
         // TODO add your handling code here:
-        CtrlVistas controlador=new CtrlVistas();
-        controlador.crearSala();
-        this.setVisible(false);
-        this.dispose();
+        DlgTipoSala dlgTipoSala = new DlgTipoSala(this, true);
+        dlgTipoSala.setVisible(true);
+
+// Después de que el diálogo se cierra
+        String tipoSeleccionado = dlgTipoSala.getTipoSeleccionado();
+
+        if (tipoSeleccionado != null) {
+            // Seleccionó "Publica" o "Privada"
+            if (tipoSeleccionado.equals("Publica")) {
+                Sala sala=ctrlVistas.crearSalaPublica();
+                sala.setDisponibilidad(sala.getDisponibilidad()-1);
+                sala.setNumJugadores(sala.getNumJugadores()+1);
+                sala.añadirJugador(socketCliente.getJugador());
+                ctrlVistas.mostrarSala(sala, socketCliente);
+                this.setVisible(false);
+                this.dispose();
+            }else{
+                Sala sala=ctrlVistas.crearSalaPrivada();
+                sala.setDisponibilidad(sala.getDisponibilidad()-1);
+                sala.setNumJugadores(sala.getNumJugadores()+1);
+                sala.añadirJugador(socketCliente.getJugador());
+                ctrlVistas.mostrarSala(sala, socketCliente);
+                this.setVisible(false);
+                this.dispose();
+            }
+        } else {
+            // Cerró el diálogo sin seleccionar nada
+            System.out.println("Cerró el diálogo sin seleccionar nada.");
+        }
     }//GEN-LAST:event_btnCrearActionPerformed
 
     private void btnUnirseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUnirseActionPerformed
         // TODO add your handling code here:
-        CtrlVistas controlador=new CtrlVistas();
-        controlador.crearSala();
+//        ctrlVistas.crearSala();
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_btnUnirseActionPerformed
 
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCrear;

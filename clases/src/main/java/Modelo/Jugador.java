@@ -5,6 +5,8 @@
  */
 package Modelo;
 
+import java.awt.Color;
+
 /**
  *
  * @author kingu
@@ -13,12 +15,12 @@ public class Jugador {
     private String usuario;
     private int puntuacion=0;
     private String avatar;
-    private String color;
+    private Color color;
 
     public Jugador() {
     }
 
-    public Jugador(String usuario, String avatar, String color) {
+    public Jugador(String usuario, String avatar, Color color) {
         this.usuario = usuario;
         this.avatar = avatar;
         this.color = color;
@@ -48,11 +50,11 @@ public class Jugador {
         this.avatar = avatar;
     }
 
-    public String getColor() {
+    public Color getColor() {
         return color;
     }
 
-    public void setColor(String color) {
+    public void setColor(Color color) {
         this.color = color;
     }
     

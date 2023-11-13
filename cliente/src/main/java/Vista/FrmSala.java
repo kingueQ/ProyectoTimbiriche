@@ -6,6 +6,17 @@
 package Vista;
 
 import Controlador.CtrlVistas;
+import Modelo.Jugador;
+import Modelo.Sala;
+import SocketCliente.SocketCliente;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Image;
+import java.util.List;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 
 /**
  *
@@ -13,11 +24,29 @@ import Controlador.CtrlVistas;
  */
 public class FrmSala extends javax.swing.JFrame {
 
+    SocketCliente socketCliente;
+    Sala sala;
+    CtrlVistas ctrlVistas = new CtrlVistas();
+
     /**
      * Creates new form FrmSala
      */
-    public FrmSala() {
+    public FrmSala(Sala sala, SocketCliente socketCliente) {
         initComponents();
+
+        this.getContentPane().setBackground(Color.BLACK);
+        this.sala = sala;
+        this.socketCliente = socketCliente;
+        this.actualizarTabla(sala.getJugadores());
+        this.lblCodigo.setText(sala.getCodigo());
+
+        // Personaliza el renderizador de celdas para la columna del avatar
+        tblJugadores.getColumnModel().getColumn(1).setCellRenderer(new AvatarRenderer());
+
+        // Personaliza el renderizador de celdas para la columna del color
+        tblJugadores.getColumnModel().getColumn(2).setCellRenderer(new ColorRenderer());
+        
+        tblJugadores.setRowHeight(60);
     }
 
     /**
@@ -31,9 +60,11 @@ public class FrmSala extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblJugadores = new javax.swing.JTable();
         btnListo = new javax.swing.JButton();
         btnAbandonar = new javax.swing.JButton();
+        lblCodigo = new javax.swing.JLabel();
+        lblJugadores = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -41,27 +72,27 @@ public class FrmSala extends javax.swing.JFrame {
         jLabel1.setForeground(new java.awt.Color(51, 0, 153));
         jLabel1.setText("Sala de espera");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblJugadores.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null},
-                {null},
-                {null},
-                {null},
-                {null}
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
             },
             new String [] {
-                "Jugadores"
+                "Jugadores", "Avatar", "Color"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false
+                false, true, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tblJugadores);
 
         btnListo.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         btnListo.setForeground(new java.awt.Color(255, 0, 51));
@@ -81,10 +112,26 @@ public class FrmSala extends javax.swing.JFrame {
             }
         });
 
+        lblCodigo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblCodigo.setForeground(new java.awt.Color(204, 0, 51));
+        lblCodigo.setText("Codigo");
+
+        lblJugadores.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblJugadores.setForeground(new java.awt.Color(204, 0, 51));
+        lblJugadores.setText("En la sala");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addComponent(lblJugadores)
+                .addGap(126, 126, 126)
+                .addComponent(jLabel1)
+                .addGap(68, 68, 68)
+                .addComponent(lblCodigo, javax.swing.GroupLayout.DEFAULT_SIZE, 81, Short.MAX_VALUE)
+                .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addGap(61, 61, 61)
                 .addComponent(btnListo)
@@ -92,26 +139,29 @@ public class FrmSala extends javax.swing.JFrame {
                 .addComponent(btnAbandonar)
                 .addGap(62, 62, 62))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(90, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(85, 85, 85))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(123, 123, 123)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 309, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(159, 159, 159))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(21, 21, 21)
-                .addComponent(jLabel1)
-                .addGap(27, 27, 27)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(15, 15, 15)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(32, 32, 32)
+                        .addComponent(lblJugadores)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 346, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnAbandonar)
                     .addComponent(btnListo))
-                .addGap(32, 32, 32))
+                .addGap(20, 20, 20))
         );
 
         pack();
@@ -120,27 +170,76 @@ public class FrmSala extends javax.swing.JFrame {
 
     private void btnAbandonarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAbandonarActionPerformed
         // TODO add your handling code here:
-        CtrlVistas controlador=new CtrlVistas();
-        controlador.showMenu();
+        ctrlVistas.showMenu(socketCliente);
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_btnAbandonarActionPerformed
 
     private void btnListoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListoActionPerformed
         // TODO add your handling code here:
-        CtrlVistas controlador=new CtrlVistas();
-        controlador.iniciarJuego();
+        ctrlVistas.iniciarJuego(sala.getJugadores(), socketCliente);
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_btnListoActionPerformed
 
-    
+    private void actualizarTabla(List<Jugador> jugadores) {
+        for (int i = 0; i < jugadores.size(); i++) {
+            this.tblJugadores.setValueAt(jugadores.get(i).getUsuario(), i, 0);
+            this.tblJugadores.setValueAt(jugadores.get(i).getAvatar(), i, 1);
+            this.tblJugadores.setValueAt(jugadores.get(i).getColor(), i, 2);
+        }
+        
+        this.lblJugadores.setText(jugadores.size() + "/4");
+    }
+
+    private static class AvatarRenderer extends DefaultTableCellRenderer {
+
+        private static final int ICON_WIDTH = 50; // Ajusta el ancho de la imagen según tus preferencias
+        private static final int ICON_HEIGHT = 50; // Ajusta el alto de la imagen según tus preferencias
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+                boolean hasFocus, int row, int column) {
+            JLabel label = new JLabel();
+
+            // Verifica si el valor es una cadena no vacía antes de intentar cargar la imagen
+            if (value != null && value instanceof String && !((String) value).isEmpty()) {
+                try {
+                    ImageIcon icono = new ImageIcon(getClass().getResource((String) value));
+                    Image imagenRedimensionada = icono.getImage().getScaledInstance(ICON_WIDTH, ICON_HEIGHT, Image.SCALE_SMOOTH);
+//                    label.setIcon(new ImageIcon(getClass().getResource((String) value)));
+                    ImageIcon iconoRedimensionado = new ImageIcon(imagenRedimensionada);
+                    label.setIcon(iconoRedimensionado);
+                } catch (Exception e) {
+                    // Manejo de errores en caso de problemas al cargar la imagen
+                    e.printStackTrace();
+                    label.setText("Error de carga");
+                }
+            }
+
+            return label;
+        }
+    }
+
+    private static class ColorRenderer extends DefaultTableCellRenderer {
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+                boolean hasFocus, int row, int column) {
+            JLabel label = new JLabel();
+            label.setOpaque(true);
+            label.setBackground((Color) value);
+            return label;
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAbandonar;
     private javax.swing.JButton btnListo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JLabel lblCodigo;
+    private javax.swing.JLabel lblJugadores;
+    private javax.swing.JTable tblJugadores;
     // End of variables declaration//GEN-END:variables
 }

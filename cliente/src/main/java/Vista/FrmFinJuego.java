@@ -5,6 +5,8 @@
  */
 package Vista;
 
+import java.awt.Color;
+
 /**
  *
  * @author kingu
@@ -16,6 +18,8 @@ public class FrmFinJuego extends javax.swing.JFrame {
      */
     public FrmFinJuego() {
         initComponents();
+        
+        this.getContentPane().setBackground(Color.BLACK);
     }
 
     /**
