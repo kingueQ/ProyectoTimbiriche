@@ -11,6 +11,8 @@ public class TableroPanel extends javax.swing.JPanel {
     private char[][] matrizTablero;
 
     public TableroPanel(char[][] matrizTablero) {
+        System.out.println("Ancho TableroPanel: " + getWidth());
+        System.out.println("Alto TableroPanel: " + getHeight());
         this.matrizTablero = matrizTablero;
     }
 

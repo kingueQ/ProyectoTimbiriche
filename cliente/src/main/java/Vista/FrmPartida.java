@@ -10,6 +10,7 @@ import Controlador.CtrlVistas;
 import Modelo.Jugador;
 import Modelo.TableroPanel;
 import SocketCliente.SocketCliente;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.util.List;
 
@@ -19,23 +20,28 @@ import java.util.List;
  */
 public class FrmPartida extends javax.swing.JFrame {
 
-    CtrlJuego ctrlJuego=new CtrlJuego();
+    CtrlJuego ctrlJuego = new CtrlJuego();
     List<Jugador> jugadores;
     SocketCliente socketCliente;
+
     /**
      * Creates new form Partida
      */
     public FrmPartida(List<Jugador> jugadores, SocketCliente socketCliente) {
-        this.jugadores=jugadores;
-        this.socketCliente=socketCliente;
-        char[][] tablero=ctrlJuego.obtenerTablero(jugadores.size());
-        
+        this.jugadores = jugadores;
+        this.socketCliente = socketCliente;
+        char[][] tablero = ctrlJuego.obtenerTablero(jugadores.size() + 1);
+
         initComponents();
-        
+
         this.getContentPane().setBackground(Color.BLACK);
-        
         TableroPanel tableroPanel = new TableroPanel(tablero);
-        add(tableroPanel);
+        tableroPanel.setOpaque(false);  // Hacer que el panel sea transparente
+
+        // Agregar el TableroPanel al pnlTablero
+        pnlTablero.setLayout(new BorderLayout());
+        pnlTablero.add(tableroPanel, BorderLayout.CENTER);
+
     }
 
     /**
@@ -48,17 +54,18 @@ public class FrmPartida extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        lblAvatar1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         btnAbandonar = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
+        lblJugadorActual = new javax.swing.JLabel();
+        lblJugador1 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
+        pnlTablero = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -66,7 +73,7 @@ public class FrmPartida extends javax.swing.JFrame {
         jLabel1.setForeground(new java.awt.Color(51, 0, 153));
         jLabel1.setText("Partida");
 
-        jLabel2.setText("Avatar 1");
+        lblAvatar1.setText("Avatar 1");
 
         jLabel3.setText("Avatar 2");
 
@@ -87,17 +94,31 @@ public class FrmPartida extends javax.swing.JFrame {
         jLabel6.setForeground(new java.awt.Color(0, 102, 255));
         jLabel6.setText("Turno actual:");
 
-        jLabel7.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel7.setForeground(new java.awt.Color(0, 102, 255));
-        jLabel7.setText("Jugador 1");
+        lblJugadorActual.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblJugadorActual.setForeground(new java.awt.Color(0, 102, 255));
+        lblJugadorActual.setText("Jugador 1");
 
-        jLabel8.setText("Jugador 1");
+        lblJugador1.setText("Jugador 1");
 
         jLabel9.setText("Jugador 2");
 
         jLabel10.setText("Jugador 3");
 
         jLabel11.setText("Jugador 4");
+
+        pnlTablero.setMinimumSize(new java.awt.Dimension(500, 500));
+        pnlTablero.setPreferredSize(new java.awt.Dimension(500, 500));
+
+        javax.swing.GroupLayout pnlTableroLayout = new javax.swing.GroupLayout(pnlTablero);
+        pnlTablero.setLayout(pnlTableroLayout);
+        pnlTableroLayout.setHorizontalGroup(
+            pnlTableroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        pnlTableroLayout.setVerticalGroup(
+            pnlTableroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -107,21 +128,27 @@ public class FrmPartida extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnAbandonar)
-                        .addGap(63, 63, 63))
+                        .addComponent(lblAvatar1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 234, Short.MAX_VALUE)
+                        .addComponent(jLabel1)
+                        .addGap(224, 224, 224))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(lblJugador1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel6)
-                            .addComponent(jLabel7)
-                            .addComponent(jLabel10)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(63, 63, 63)
-                                .addComponent(jLabel1))
-                            .addComponent(jLabel8))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 55, Short.MAX_VALUE)))
+                            .addComponent(lblJugadorActual))
+                        .addGap(50, 50, 50)
+                        .addComponent(pnlTablero, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(19, 19, 19))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel10))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnAbandonar)
+                        .addGap(228, 228, 228)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel11)
                     .addComponent(jLabel9)
@@ -134,28 +161,34 @@ public class FrmPartida extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(21, 21, 21)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel8)
-                    .addComponent(jLabel9))
-                .addGap(36, 36, 36)
-                .addComponent(jLabel6)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel7)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel10)
-                    .addComponent(jLabel11))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 44, Short.MAX_VALUE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnAbandonar)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(lblAvatar1, javax.swing.GroupLayout.DEFAULT_SIZE, 44, Short.MAX_VALUE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblJugador1)
+                            .addComponent(jLabel9))
+                        .addGap(197, 197, 197)
+                        .addComponent(jLabel6)
+                        .addGap(18, 18, 18)
+                        .addComponent(lblJugadorActual)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 261, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel10)
+                            .addComponent(jLabel11))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 44, Short.MAX_VALUE)
+                            .addComponent(jLabel5)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(26, 26, 26)
+                        .addComponent(pnlTablero, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnAbandonar)
+                        .addGap(26, 26, 26)))
                 .addContainerGap())
         );
 
@@ -165,26 +198,26 @@ public class FrmPartida extends javax.swing.JFrame {
 
     private void btnAbandonarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAbandonarActionPerformed
         // TODO add your handling code here:
-        CtrlVistas controlador=new CtrlVistas();
+        CtrlVistas controlador = new CtrlVistas();
         controlador.showMenu(this.socketCliente);
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_btnAbandonarActionPerformed
 
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAbandonar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel lblAvatar1;
+    private javax.swing.JLabel lblJugador1;
+    private javax.swing.JLabel lblJugadorActual;
+    private javax.swing.JPanel pnlTablero;
     // End of variables declaration//GEN-END:variables
 }

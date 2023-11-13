@@ -5,6 +5,8 @@
  */
 package Vista;
 
+import java.awt.Color;
+
 /**
  *
  * @author kingu
@@ -18,6 +20,8 @@ public class DlgTipoSala extends javax.swing.JDialog {
     public DlgTipoSala(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        
+        this.getContentPane().setBackground(Color.BLACK);
         tipoSeleccionado = null;
     }
 
@@ -103,6 +107,7 @@ public class DlgTipoSala extends javax.swing.JDialog {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnPublicaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPublicaActionPerformed

@@ -5,6 +5,8 @@
  */
 package Vista;
 
+import java.awt.Color;
+
 /**
  *
  * @author kingu
@@ -17,6 +19,8 @@ public class DlgCodigo extends javax.swing.JDialog {
     public DlgCodigo(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        
+        this.getContentPane().setBackground(Color.BLACK);
     }
 
     /**
