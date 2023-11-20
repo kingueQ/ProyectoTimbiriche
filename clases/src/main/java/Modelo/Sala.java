@@ -78,4 +78,19 @@ public class Sala {
     public void eliminarJugador(Jugador jugador){
         this.jugadores.remove(jugador);
     }
+    
+    public boolean jugadorExiste(String nombreUsuario) {
+        for (Jugador jugador : jugadores) {
+            if (jugador.getUsuario().equals(nombreUsuario)) {
+                return true; // El jugador ya está en la sala
+            }
+        }
+        return false; // El jugador no está en la sala
+    }
+
+    public void agregarJugador(Jugador jugador) {
+        if (!jugadorExiste(jugador.getUsuario())) {
+            jugadores.add(jugador);
+        }
+    }
 }

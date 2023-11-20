@@ -5,6 +5,9 @@
  */
 package SocketServidor;
 
+import Modelo.Colores;
+import Modelo.Jugador;
+import Modelo.Sala;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -19,6 +22,7 @@ public class SocketServidor {
     private static final int PUERTO = 12345;
     private List<String> nombresUsuarios = new ArrayList<>();
     private ServerSocket serverSocket;
+    private List<Sala> salas = new ArrayList<>();
 
     public void iniciarServidor() {
         try {
@@ -68,29 +72,35 @@ public class SocketServidor {
         public void run() {
             try {
                 // Manejar la lógica de comunicación con el cliente
-                // Puedes implementar un protocolo para enviar/recibir mensajes
-                // Aquí un ejemplo muy simple
-
                 String mensajeCliente = in.readLine();
-                if (mensajeCliente != null) {
 
+                if (mensajeCliente != null) {
                     System.out.println("Mensaje del cliente: " + mensajeCliente);
 
                     // Dividir el mensaje en partes
                     String[] partes = mensajeCliente.split(",");
-                    if (partes.length >= 3) {
+
+                    if (partes.length >= 4) {
                         String nombreUsuario = partes[0];
                         String avatarSeleccionado = partes[1];
                         String colorSeleccionado = partes[2];
-// Verificar nombre de usuario
-                        if (!nombresUsuarios.contains(nombreUsuario)) {
-                            // Usuario disponible, agregar a la lista de nombres de usuario
-                            nombresUsuarios.add(nombreUsuario);
-                            out.println("OK"); // Confirmar al cliente que el nombre de usuario es válido
+                        String codigoSala = partes[3];
+
+                        // Buscar la sala por código
+                        Sala sala = buscarSala(codigoSala);
+
+                        if (sala != null) {
+                            // Verificar nombre de usuario en la sala
+                            if (!sala.jugadorExiste(nombreUsuario)) {
+                                // Usuario disponible, agregar a la lista de nombres de usuario de la sala
+                                sala.agregarJugador(new Jugador(nombreUsuario, avatarSeleccionado, Colores.getColor(colorSeleccionado)));
+                                out.println("OK"); // Confirmar al cliente que el nombre de usuario es válido
+                            } else {
+                                out.println("DUPLICADO"); // Informar al cliente que el nombre de usuario ya está en uso
+                            }
                         } else {
-                            out.println("DUPLICADO"); // Informar al cliente que el nombre de usuario ya está en uso
+                            out.println("SALA_NO_EXISTE"); // Informar al cliente que la sala no existe
                         }
-                        // Resto del código...
                     } else {
                         System.out.println("Mensaje del cliente no tiene el formato esperado.");
                     }
@@ -100,6 +110,15 @@ public class SocketServidor {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+
+        private Sala buscarSala(String codigo) {
+            for (Sala sala : salas) {
+                if (sala.getCodigo().equals(codigo)) {
+                    return sala;
+                }
+            }
+            return null;
         }
     }
 }
