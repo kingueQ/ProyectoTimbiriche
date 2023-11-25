@@ -16,6 +16,7 @@ public class Jugador {
     private int puntuacion=0;
     private String avatar;
     private Color color;
+    private boolean listo=false;
 
     public Jugador() {
     }
@@ -56,6 +57,14 @@ public class Jugador {
 
     public void setColor(Color color) {
         this.color = color;
+    }
+
+    public boolean isListo() {
+        return listo;
+    }
+
+    public void setListo(boolean listo) {
+        this.listo = listo;
     }
     
     

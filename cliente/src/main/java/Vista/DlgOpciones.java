@@ -5,6 +5,7 @@
  */
 package Vista;
 
+import SocketCliente.SocketCliente;
 import java.awt.Color;
 
 /**
@@ -13,6 +14,7 @@ import java.awt.Color;
  */
 public class DlgOpciones extends javax.swing.JDialog {
 
+    private String tipoSeleccionado;
     /**
      * Creates new form DlgOpciones
      */
@@ -21,6 +23,7 @@ public class DlgOpciones extends javax.swing.JDialog {
         initComponents();
         
         this.getContentPane().setBackground(Color.BLACK);
+        tipoSeleccionado = null;
     }
 
     /**
@@ -33,9 +36,9 @@ public class DlgOpciones extends javax.swing.JDialog {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        btnRapido = new javax.swing.JButton();
+        btnCodigo = new javax.swing.JButton();
+        btnCancelar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -43,17 +46,32 @@ public class DlgOpciones extends javax.swing.JDialog {
         jLabel1.setForeground(new java.awt.Color(51, 0, 153));
         jLabel1.setText("Opciones");
 
-        jButton1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(255, 0, 51));
-        jButton1.setText("Unión Rápida");
+        btnRapido.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        btnRapido.setForeground(new java.awt.Color(255, 0, 51));
+        btnRapido.setText("Unión Rápida");
+        btnRapido.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRapidoActionPerformed(evt);
+            }
+        });
 
-        jButton2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton2.setForeground(new java.awt.Color(255, 0, 51));
-        jButton2.setText("Tengo un Código de Sala");
+        btnCodigo.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        btnCodigo.setForeground(new java.awt.Color(255, 0, 51));
+        btnCodigo.setText("Tengo un Código de Sala");
+        btnCodigo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCodigoActionPerformed(evt);
+            }
+        });
 
-        jButton3.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton3.setForeground(new java.awt.Color(255, 0, 51));
-        jButton3.setText("Cancelar");
+        btnCancelar.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        btnCancelar.setForeground(new java.awt.Color(255, 0, 51));
+        btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -63,13 +81,13 @@ public class DlgOpciones extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(125, 125, 125)
-                        .addComponent(jButton1))
+                        .addComponent(btnRapido))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(76, 76, 76)
-                        .addComponent(jButton2))
+                        .addComponent(btnCodigo))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(146, 146, 146)
-                        .addComponent(jButton3))
+                        .addComponent(btnCancelar))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(113, 113, 113)
                         .addComponent(jLabel1)))
@@ -81,11 +99,11 @@ public class DlgOpciones extends javax.swing.JDialog {
                 .addGap(21, 21, 21)
                 .addComponent(jLabel1)
                 .addGap(48, 48, 48)
-                .addComponent(jButton1)
+                .addComponent(btnRapido)
                 .addGap(38, 38, 38)
-                .addComponent(jButton2)
+                .addComponent(btnCodigo)
                 .addGap(41, 41, 41)
-                .addComponent(jButton3)
+                .addComponent(btnCancelar)
                 .addContainerGap(15, Short.MAX_VALUE))
         );
 
@@ -93,12 +111,33 @@ public class DlgOpciones extends javax.swing.JDialog {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnCodigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCodigoActionPerformed
+        // TODO add your handling code here:
+        tipoSeleccionado = "Privada";
+        dispose();
+    }//GEN-LAST:event_btnCodigoActionPerformed
+
+    private void btnRapidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRapidoActionPerformed
+        // TODO add your handling code here:
+        tipoSeleccionado = "Publica";
+        dispose();
+    }//GEN-LAST:event_btnRapidoActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        // TODO add your handling code here:
+        tipoSeleccionado = null;  // Restablece la selección a null
+        dispose();
+    }//GEN-LAST:event_btnCancelarActionPerformed
+
+    public String getTipoSeleccionado() {
+        return tipoSeleccionado;
+    }
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JButton btnCancelar;
+    private javax.swing.JButton btnCodigo;
+    private javax.swing.JButton btnRapido;
     private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
 }

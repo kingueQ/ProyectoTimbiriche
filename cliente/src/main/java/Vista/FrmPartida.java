@@ -6,13 +6,17 @@
 package Vista;
 
 import Controlador.CtrlJuego;
+import Controlador.CtrlServidor;
 import Controlador.CtrlVistas;
 import Modelo.Jugador;
 import Modelo.TableroPanel;
 import SocketCliente.SocketCliente;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Image;
 import java.util.List;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 
 /**
  *
@@ -23,14 +27,16 @@ public class FrmPartida extends javax.swing.JFrame {
     CtrlJuego ctrlJuego = new CtrlJuego();
     List<Jugador> jugadores;
     SocketCliente socketCliente;
+    CtrlServidor ctrlServidor;
 
     /**
      * Creates new form Partida
      */
-    public FrmPartida(List<Jugador> jugadores, SocketCliente socketCliente) {
+    public FrmPartida(List<Jugador> jugadores, SocketCliente socketCliente, CtrlServidor ctrlServidor) {
         this.jugadores = jugadores;
         this.socketCliente = socketCliente;
-        char[][] tablero = ctrlJuego.obtenerTablero(jugadores.size() + 1);
+        this.ctrlServidor = ctrlServidor;
+        char[][] tablero = ctrlJuego.obtenerTablero(jugadores.size());
 
         initComponents();
 
@@ -42,6 +48,7 @@ public class FrmPartida extends javax.swing.JFrame {
         pnlTablero.setLayout(new BorderLayout());
         pnlTablero.add(tableroPanel, BorderLayout.CENTER);
 
+        this.cargarJugadores();
     }
 
     /**
@@ -55,16 +62,16 @@ public class FrmPartida extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         lblAvatar1 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
+        lblAvatar2 = new javax.swing.JLabel();
+        lblAvatar3 = new javax.swing.JLabel();
+        lblAvatar4 = new javax.swing.JLabel();
         btnAbandonar = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
         lblJugadorActual = new javax.swing.JLabel();
         lblJugador1 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
+        lblJugador2 = new javax.swing.JLabel();
+        lblJugador3 = new javax.swing.JLabel();
+        lblJugador4 = new javax.swing.JLabel();
         pnlTablero = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -72,14 +79,6 @@ public class FrmPartida extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(51, 0, 153));
         jLabel1.setText("Partida");
-
-        lblAvatar1.setText("Avatar 1");
-
-        jLabel3.setText("Avatar 2");
-
-        jLabel4.setText("Avatar 3");
-
-        jLabel5.setText("Avatar 4");
 
         btnAbandonar.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         btnAbandonar.setForeground(new java.awt.Color(255, 0, 51));
@@ -100,11 +99,11 @@ public class FrmPartida extends javax.swing.JFrame {
 
         lblJugador1.setText("Jugador 1");
 
-        jLabel9.setText("Jugador 2");
+        lblJugador2.setText("Jugador 2");
 
-        jLabel10.setText("Jugador 3");
+        lblJugador3.setText("Jugador 3");
 
-        jLabel11.setText("Jugador 4");
+        lblJugador4.setText("Jugador 4");
 
         pnlTablero.setMinimumSize(new java.awt.Dimension(500, 500));
         pnlTablero.setPreferredSize(new java.awt.Dimension(500, 500));
@@ -128,8 +127,8 @@ public class FrmPartida extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblAvatar1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 234, Short.MAX_VALUE)
+                        .addComponent(lblAvatar1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 244, Short.MAX_VALUE)
                         .addComponent(jLabel1)
                         .addGap(224, 224, 224))
                     .addGroup(layout.createSequentialGroup()
@@ -144,17 +143,17 @@ public class FrmPartida extends javax.swing.JFrame {
                         .addGap(19, 19, 19))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel10))
+                            .addComponent(lblAvatar3, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblJugador3))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnAbandonar)
                         .addGap(228, 228, 228)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel11)
-                    .addComponent(jLabel9)
+                    .addComponent(lblJugador4)
+                    .addComponent(lblJugador2)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE)
-                        .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(lblAvatar2, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
+                        .addComponent(lblAvatar4, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)))
                 .addGap(19, 19, 19))
         );
         layout.setVerticalGroup(
@@ -164,28 +163,28 @@ public class FrmPartida extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(lblAvatar1, javax.swing.GroupLayout.DEFAULT_SIZE, 44, Short.MAX_VALUE)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(lblAvatar1, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
+                            .addComponent(lblAvatar2, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblJugador1)
-                            .addComponent(jLabel9))
+                            .addComponent(lblJugador2))
                         .addGap(197, 197, 197)
                         .addComponent(jLabel6)
                         .addGap(18, 18, 18)
                         .addComponent(lblJugadorActual)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 261, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 249, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel10)
-                            .addComponent(jLabel11))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(lblJugador3)
+                            .addComponent(lblJugador4))
+                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 44, Short.MAX_VALUE)
-                            .addComponent(jLabel5)))
+                            .addComponent(lblAvatar3, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
+                            .addComponent(lblAvatar4, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addGap(26, 26, 26)
-                        .addComponent(pnlTablero, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(pnlTablero, javax.swing.GroupLayout.DEFAULT_SIZE, 512, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnAbandonar)
                         .addGap(26, 26, 26)))
@@ -199,24 +198,48 @@ public class FrmPartida extends javax.swing.JFrame {
     private void btnAbandonarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAbandonarActionPerformed
         // TODO add your handling code here:
         CtrlVistas controlador = new CtrlVistas();
-        controlador.showMenu(this.socketCliente);
+        controlador.showMenu(this.socketCliente, this.ctrlServidor);
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_btnAbandonarActionPerformed
 
+    private void cargarJugadores() {
+        cargarJugador(0, lblJugador1, lblAvatar1);
+        cargarJugador(1, lblJugador2, lblAvatar2);
+        cargarJugador(2, lblJugador3, lblAvatar3);
+        cargarJugador(3, lblJugador4, lblAvatar4);
+    }
+
+    private void cargarJugador(int indice, JLabel lblJugador, JLabel lblAvatar) {
+        if (jugadores.size() > indice) {
+            lblJugador.setText(jugadores.get(indice).getUsuario());
+            lblJugador.setForeground(jugadores.get(indice).getColor());
+            try {
+                ImageIcon icon = new ImageIcon(getClass().getResource(jugadores.get(indice).getAvatar()));
+                Image imagenRedimensionada = icon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+                ImageIcon iconoRedimensionado = new ImageIcon(imagenRedimensionada);
+                lblAvatar.setIcon(iconoRedimensionado);
+            } catch (Exception e) {
+                e.printStackTrace(); // Puedes cambiar esto por un manejo más específico de la excepción
+            }
+        } else {
+            lblJugador.setText("");
+            lblAvatar.setIcon(null);
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAbandonar;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JLabel lblAvatar1;
+    private javax.swing.JLabel lblAvatar2;
+    private javax.swing.JLabel lblAvatar3;
+    private javax.swing.JLabel lblAvatar4;
     private javax.swing.JLabel lblJugador1;
+    private javax.swing.JLabel lblJugador2;
+    private javax.swing.JLabel lblJugador3;
+    private javax.swing.JLabel lblJugador4;
     private javax.swing.JLabel lblJugadorActual;
     private javax.swing.JPanel pnlTablero;
     // End of variables declaration//GEN-END:variables

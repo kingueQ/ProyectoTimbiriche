@@ -5,6 +5,7 @@
  */
 package Vista;
 
+import Controlador.CtrlServidor;
 import Controlador.CtrlVistas;
 import Modelo.Jugador;
 import Modelo.Sala;
@@ -15,6 +16,7 @@ import java.awt.Image;
 import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
@@ -27,16 +29,18 @@ public class FrmSala extends javax.swing.JFrame {
     SocketCliente socketCliente;
     Sala sala;
     CtrlVistas ctrlVistas = new CtrlVistas();
+    CtrlServidor ctrlServidor;
 
     /**
      * Creates new form FrmSala
      */
-    public FrmSala(Sala sala, SocketCliente socketCliente) {
+    public FrmSala(Sala sala, SocketCliente socketCliente, CtrlServidor ctrlServidor) {
         initComponents();
 
         this.getContentPane().setBackground(Color.BLACK);
         this.sala = sala;
         this.socketCliente = socketCliente;
+        this.ctrlServidor = ctrlServidor;
         this.actualizarTabla(sala.getJugadores());
         this.lblCodigo.setText(sala.getCodigo());
 
@@ -45,7 +49,7 @@ public class FrmSala extends javax.swing.JFrame {
 
         // Personaliza el renderizador de celdas para la columna del color
         tblJugadores.getColumnModel().getColumn(2).setCellRenderer(new ColorRenderer());
-        
+
         tblJugadores.setRowHeight(60);
     }
 
@@ -170,16 +174,23 @@ public class FrmSala extends javax.swing.JFrame {
 
     private void btnAbandonarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAbandonarActionPerformed
         // TODO add your handling code here:
-        ctrlVistas.showMenu(socketCliente);
-        this.setVisible(false);
-        this.dispose();
+        int respuesta = JOptionPane.showConfirmDialog(this, "Estas seguro que deseas abandonar la sala?");
+        if (respuesta == 0) {
+//            ctrlServidor.eliminarJugadorSala(this.sala, this.socketCliente.getJugador());
+            ctrlVistas.showMenu(socketCliente, ctrlServidor);
+            this.setVisible(false);
+            this.dispose();
+        }
     }//GEN-LAST:event_btnAbandonarActionPerformed
 
     private void btnListoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListoActionPerformed
         // TODO add your handling code here:
-        ctrlVistas.iniciarJuego(sala.getJugadores(), socketCliente);
-        this.setVisible(false);
-        this.dispose();
+        this.sala = ctrlServidor.listo(this.sala, this.socketCliente.getJugador());
+        if (this.sala.getListos() == this.sala.getNumJugadores() && this.sala.getNumJugadores()>1) {
+            ctrlVistas.iniciarJuego(sala.getJugadores(), socketCliente, ctrlServidor);
+            this.setVisible(false);
+            this.dispose();
+        }
     }//GEN-LAST:event_btnListoActionPerformed
 
     private void actualizarTabla(List<Jugador> jugadores) {
@@ -188,7 +199,7 @@ public class FrmSala extends javax.swing.JFrame {
             this.tblJugadores.setValueAt(jugadores.get(i).getAvatar(), i, 1);
             this.tblJugadores.setValueAt(jugadores.get(i).getColor(), i, 2);
         }
-        
+
         this.lblJugadores.setText(jugadores.size() + "/4");
     }
 

@@ -27,8 +27,8 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <Component id="lblAvatar1" min="-2" pref="60" max="-2" attributes="0"/>
-                      <EmptySpace pref="234" max="32767" attributes="0"/>
+                      <Component id="lblAvatar1" min="-2" pref="50" max="-2" attributes="0"/>
+                      <EmptySpace pref="244" max="32767" attributes="0"/>
                       <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="224" max="-2" attributes="0"/>
                   </Group>
@@ -47,8 +47,8 @@
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jLabel4" alignment="0" min="-2" pref="60" max="-2" attributes="0"/>
-                          <Component id="jLabel10" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblAvatar3" alignment="0" min="-2" pref="50" max="-2" attributes="0"/>
+                          <Component id="lblJugador3" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="32767" attributes="0"/>
                       <Component id="btnAbandonar" min="-2" max="-2" attributes="0"/>
@@ -56,11 +56,11 @@
                   </Group>
               </Group>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jLabel11" min="-2" max="-2" attributes="0"/>
-                  <Component id="jLabel9" min="-2" max="-2" attributes="0"/>
+                  <Component id="lblJugador4" min="-2" max="-2" attributes="0"/>
+                  <Component id="lblJugador2" min="-2" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="jLabel3" pref="60" max="32767" attributes="0"/>
-                      <Component id="jLabel5" max="32767" attributes="0"/>
+                      <Component id="lblAvatar2" pref="50" max="32767" attributes="0"/>
+                      <Component id="lblAvatar4" pref="50" max="32767" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
@@ -74,33 +74,33 @@
               <Group type="103" groupAlignment="1" attributes="0">
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="lblAvatar1" alignment="0" pref="44" max="32767" attributes="0"/>
-                          <Component id="jLabel3" alignment="0" max="32767" attributes="0"/>
+                          <Component id="lblAvatar1" alignment="0" pref="50" max="32767" attributes="0"/>
+                          <Component id="lblAvatar2" alignment="0" pref="50" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="lblJugador1" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel9" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblJugador2" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="197" max="-2" attributes="0"/>
                       <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="lblJugadorActual" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="261" max="32767" attributes="0"/>
+                      <EmptySpace pref="249" max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jLabel10" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel11" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblJugador3" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblJugador4" alignment="1" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="jLabel4" pref="44" max="32767" attributes="0"/>
-                          <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblAvatar3" pref="50" max="32767" attributes="0"/>
+                          <Component id="lblAvatar4" pref="50" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                   <Group type="102" attributes="0">
                       <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
-                      <Component id="pnlTablero" max="32767" attributes="0"/>
+                      <Component id="pnlTablero" pref="512" max="32767" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="btnAbandonar" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
@@ -124,24 +124,12 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="lblAvatar1">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Avatar 1"/>
-      </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="jLabel3">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Avatar 2"/>
-      </Properties>
+    <Component class="javax.swing.JLabel" name="lblAvatar2">
     </Component>
-    <Component class="javax.swing.JLabel" name="jLabel4">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Avatar 3"/>
-      </Properties>
+    <Component class="javax.swing.JLabel" name="lblAvatar3">
     </Component>
-    <Component class="javax.swing.JLabel" name="jLabel5">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Avatar 4"/>
-      </Properties>
+    <Component class="javax.swing.JLabel" name="lblAvatar4">
     </Component>
     <Component class="javax.swing.JButton" name="btnAbandonar">
       <Properties>
@@ -184,17 +172,17 @@
         <Property name="text" type="java.lang.String" value="Jugador 1"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="jLabel9">
+    <Component class="javax.swing.JLabel" name="lblJugador2">
       <Properties>
         <Property name="text" type="java.lang.String" value="Jugador 2"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="jLabel10">
+    <Component class="javax.swing.JLabel" name="lblJugador3">
       <Properties>
         <Property name="text" type="java.lang.String" value="Jugador 3"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="jLabel11">
+    <Component class="javax.swing.JLabel" name="lblJugador4">
       <Properties>
         <Property name="text" type="java.lang.String" value="Jugador 4"/>
       </Properties>

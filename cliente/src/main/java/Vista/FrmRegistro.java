@@ -5,6 +5,7 @@
  */
 package Vista;
 
+import Controlador.CtrlServidor;
 import Controlador.CtrlVistas;
 import Modelo.Avatar;
 import Modelo.Colores;
@@ -32,11 +33,11 @@ public class FrmRegistro extends javax.swing.JFrame {
     private Avatar avatar;
     CtrlVistas controlador = new CtrlVistas();
     private SocketCliente socketCliente;
-
+    CtrlServidor ctrlServidor;
     /**
      * Creates new form FrmRegistro
      */
-    public FrmRegistro(SocketCliente socketCliente) {
+    public FrmRegistro(SocketCliente socketCliente, CtrlServidor ctrlServidor) {
         initComponents();
 
         this.getContentPane().setBackground(Color.BLACK);
@@ -45,6 +46,7 @@ public class FrmRegistro extends javax.swing.JFrame {
         llenarComboBoxColores();
 
         this.socketCliente = socketCliente;
+        this.ctrlServidor=ctrlServidor;
     }
 
     /**
@@ -161,7 +163,7 @@ public class FrmRegistro extends javax.swing.JFrame {
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
         // TODO add your handling code here:
-        controlador.startApplication();
+        controlador.startApplication(this.ctrlServidor);
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_btnRegresarActionPerformed
@@ -172,20 +174,14 @@ public class FrmRegistro extends javax.swing.JFrame {
         String avatarSeleccionado = (String) this.cbxAvatar.getSelectedItem();
         String colorSeleccionado = (String) this.cbxColor.getSelectedItem();
         
-        String mensaje = nombreUsuario + "," + avatarSeleccionado + "," + colorSeleccionado;
-        System.out.println("Mensaje enviado al servidor: " + mensaje);
-        String respuestaServidor = socketCliente.validarRegistro(nombreUsuario, avatarSeleccionado, colorSeleccionado);
-        if ("OK".equals(respuestaServidor)) {
+        Jugador jugador=new Jugador(nombreUsuario, avatarSeleccionado, Colores.getColor(colorSeleccionado));
+        if (ctrlServidor.agregarJugador(jugador)) {
             this.socketCliente.setJugador(new Jugador(nombreUsuario, avatarSeleccionado, Colores.getColor(colorSeleccionado)));
-            controlador.showMenu(this.socketCliente);
+            controlador.showMenu(this.socketCliente, this.ctrlServidor);
             this.setVisible(false);
             this.dispose();
-        } else if ("DUPLICADO".equals(respuestaServidor)) {
-            // Muestra un mensaje o realiza alguna acción en caso de nombre de usuario duplicado
-            // Puedes agregar un JLabel o JOptionPane para informar al usuario.
-            JOptionPane.showMessageDialog(this, "Ese nombre del usuario ya se encuentra registrado, por favor elija otro");
-            this.socketCliente.cerrarConexion();
-            this.socketCliente=new SocketCliente();
+        } else {
+            JOptionPane.showMessageDialog(this, "El nombre de usuario ya se encuentra registrado");
         }
     }//GEN-LAST:event_btnIngresarActionPerformed
 

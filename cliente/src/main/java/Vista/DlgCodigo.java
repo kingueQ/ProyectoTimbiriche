@@ -5,7 +5,10 @@
  */
 package Vista;
 
+import Controlador.CtrlVistas;
+import SocketCliente.SocketCliente;
 import java.awt.Color;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -13,14 +16,16 @@ import java.awt.Color;
  */
 public class DlgCodigo extends javax.swing.JDialog {
 
+    String codigo;
     /**
      * Creates new form DlgCodigo
      */
     public DlgCodigo(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        
+
         this.getContentPane().setBackground(Color.BLACK);
+        codigo=null;
     }
 
     /**
@@ -35,7 +40,7 @@ public class DlgCodigo extends javax.swing.JDialog {
         jLabel1 = new javax.swing.JLabel();
         txtCodigo = new javax.swing.JTextField();
         btnUnirse = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        btnRegresar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -52,30 +57,35 @@ public class DlgCodigo extends javax.swing.JDialog {
             }
         });
 
-        jButton2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton2.setForeground(new java.awt.Color(255, 0, 51));
-        jButton2.setText("Regresar");
+        btnRegresar.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        btnRegresar.setForeground(new java.awt.Color(255, 0, 51));
+        btnRegresar.setText("Regresar");
+        btnRegresar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegresarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(160, 160, 160)
-                        .addComponent(btnUnirse))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(149, 149, 149)
-                        .addComponent(jButton2))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(134, 134, 134)
-                        .addComponent(jLabel1)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 125, Short.MAX_VALUE)
                 .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(123, 123, 123))
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(134, 134, 134)
+                        .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(157, 157, 157)
+                        .addComponent(btnUnirse))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(146, 146, 146)
+                        .addComponent(btnRegresar)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -84,11 +94,11 @@ public class DlgCodigo extends javax.swing.JDialog {
                 .addComponent(jLabel1)
                 .addGap(31, 31, 31)
                 .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(33, 33, 33)
+                .addGap(37, 37, 37)
                 .addComponent(btnUnirse)
-                .addGap(39, 39, 39)
-                .addComponent(jButton2)
-                .addContainerGap(37, Short.MAX_VALUE))
+                .addGap(29, 29, 29)
+                .addComponent(btnRegresar)
+                .addContainerGap(43, Short.MAX_VALUE))
         );
 
         pack();
@@ -96,14 +106,37 @@ public class DlgCodigo extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnUnirseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUnirseActionPerformed
-        // TODO add your handling code here:
+        // Obtener el código ingresado por el usuario
+        String codigoSala = txtCodigo.getText().trim();
+
+        // Verificar si el código de sala es válido
+        if (!codigoSala.isEmpty()) {
+            // Enviar el código al servidor y recibir la respuesta
+            if(codigoSala.length()==6){
+                this.codigo=codigoSala;
+                dispose();
+            }else{
+                JOptionPane.showMessageDialog(this, "El codigo debe contener 6 caracteres alfanumericos");
+            }
+        } else {
+            // Mostrar un mensaje indicando que el campo de código no puede estar vacío
+            JOptionPane.showMessageDialog(this, "Ingrese un código de sala válido.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnUnirseActionPerformed
 
-    
+    private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
+        // TODO add your handling code here:
+        codigo=null;
+        this.dispose();
+    }//GEN-LAST:event_btnRegresarActionPerformed
+
+    public String getTipoSeleccionado() {
+        return codigo;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnRegresar;
     private javax.swing.JButton btnUnirse;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JTextField txtCodigo;
     // End of variables declaration//GEN-END:variables

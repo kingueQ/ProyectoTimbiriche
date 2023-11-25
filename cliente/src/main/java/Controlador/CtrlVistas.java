@@ -12,45 +12,47 @@ import SocketCliente.SocketCliente;
 import Vista.Vista;
 import java.util.List;
 
-
 /**
  *
  * @author kingu
  */
 public class CtrlVistas {
+
     private Vista vista;
     private Modelo modelo;
 
     public CtrlVistas() {
-        this.vista = new Vista(this) {};
+        this.vista = new Vista(this) {
+        };
         this.modelo = new Modelo();
     }
 
-    public void startApplication() {
-        vista.showPantallaInicio();
+    public void startApplication(CtrlServidor ctrlServidor) {
+        vista.showPantallaInicio(ctrlServidor);
     }
-    
-    public void showRegistro(SocketCliente socketCliente){
-        vista.showPantallaRegistro(socketCliente);
+
+    public void showRegistro(SocketCliente socketCliente, CtrlServidor ctrlServidor) {
+        vista.showPantallaRegistro(socketCliente, ctrlServidor);
     }
-    
-    public void showMenu(SocketCliente socketCliente){
-        vista.showPantallaMenu(socketCliente);
+
+    public void showMenu(SocketCliente socketCliente, CtrlServidor ctrlServidor) {
+        vista.showPantallaMenu(socketCliente, ctrlServidor);
     }
-    
-    public Sala crearSalaPublica(){
+
+    public Sala crearSalaPublica() {
         return modelo.crearSalaPublica();
     }
 
-    public void iniciarJuego(List<Jugador> jugadores, SocketCliente socketCliente){
-        vista.showPartida(jugadores, socketCliente);
+    public void iniciarJuego(List<Jugador> jugadores, SocketCliente socketCliente, CtrlServidor ctrlServidor) {
+        vista.showPartida(jugadores, socketCliente, ctrlServidor);
     }
-    
-    public Sala crearSalaPrivada(){
+
+    public Sala crearSalaPrivada() {
         return modelo.crearSalaPrivada();
     }
-    
-    public void mostrarSala(Sala sala, SocketCliente socketCliente){
-        vista.showPantallaSala(sala, socketCliente);
+
+    public void mostrarSala(Sala sala, SocketCliente socketCliente, CtrlServidor ctrlServidor) {
+        vista.showPantallaSala(sala, socketCliente, ctrlServidor);
     }
+
 }

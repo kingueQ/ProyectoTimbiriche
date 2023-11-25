@@ -1,5 +1,6 @@
 package Vista;
 
+import Controlador.CtrlServidor;
 import Controlador.CtrlVistas;
 import SocketCliente.SocketCliente;
 import java.awt.Color;
@@ -16,15 +17,16 @@ import java.awt.Color;
 public class FrmInicio extends javax.swing.JFrame {
 
     SocketCliente socketCliente;
-
+    CtrlServidor ctrlServidor;
     /**
      * Creates new form FrmInicio
      */
-    public FrmInicio() {
+    public FrmInicio(CtrlServidor ctrlServidor) {
         initComponents();
 
         this.getContentPane().setBackground(Color.BLACK);
         socketCliente = new SocketCliente();
+        this.ctrlServidor=ctrlServidor;
     }
 
     /**
@@ -100,7 +102,7 @@ public class FrmInicio extends javax.swing.JFrame {
     private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
         // TODO add your handling code here:
         CtrlVistas controlador = new CtrlVistas();
-        controlador.showRegistro(this.socketCliente);
+        controlador.showRegistro(this.socketCliente, this.ctrlServidor);
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_btnIngresarActionPerformed

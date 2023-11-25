@@ -20,7 +20,7 @@ import java.util.List;
 public class SocketServidor {
 
     private static final int PUERTO = 12345;
-    private List<String> nombresUsuarios = new ArrayList<>();
+    private List<Jugador> jugadores = new ArrayList<>();
     private ServerSocket serverSocket;
     private List<Sala> salas = new ArrayList<>();
 
@@ -52,6 +52,78 @@ public class SocketServidor {
         }
     }
 
+    private Sala buscarSala(String codigo) {
+        for (Sala sala : salas) {
+            if (sala.getCodigo().equals(codigo)) {
+                return sala;
+            }
+        }
+        return null;
+    }
+
+    public boolean agregarJugador(Jugador jugador) {
+        String nombre = jugador.getUsuario();
+        for (Jugador jugadorr : jugadores) {
+            if (jugadorr.getUsuario().equals(nombre)) {
+                return false;
+            }
+        }
+        jugadores.add(jugador);
+        return true;
+    }
+
+    public Sala unirseSala(String codigo, Jugador jugador) {
+        Sala sala = this.buscarSala(codigo);
+        if (sala != null) {
+            if (sala.añadirJugador(jugador)) {
+                return sala;
+            }
+        }
+        return null;
+    }
+    
+    public void eliminarJugadorSala(Sala sala, Jugador jugador){
+        for(int i=0;i<this.salas.size();i++){
+            if(salas.get(i).equals(sala)){
+                salas.get(i).eliminarJugador(jugador);
+            }
+        }
+    }
+
+    private List<Sala> salasPublicas() {
+        ArrayList<Sala> salas2 = new ArrayList<>();
+        for (Sala sala : salas) {
+            if (sala.getCodigo().equals("Publica")) {
+                salas2.add(sala);
+            }
+        }
+        return salas2;
+    }
+
+    public Sala unirsePublica(Jugador jugador) {
+        List<Sala> salas1 = this.salasPublicas();
+        for (Sala sala : salas1) {
+            if (sala.añadirJugador(jugador)) {
+                return sala;
+            }
+        }
+        return null;
+    }
+
+    public void crearSala(Sala sala) {
+        this.salas.add(sala);
+    }
+    
+    public Sala listo(Sala sala, Jugador jugador){
+        for(int i=0;i<this.salas.size();i++){
+            if(salas.get(i).equals(sala)){
+                salas.get(i).listo(jugador);
+                return salas.get(i);
+            }
+        }
+        return sala;
+    }
+
     private class ClientHandler implements Runnable {
 
         private Socket clientSocket;
@@ -80,45 +152,12 @@ public class SocketServidor {
                     // Dividir el mensaje en partes
                     String[] partes = mensajeCliente.split(",");
 
-                    if (partes.length >= 4) {
-                        String nombreUsuario = partes[0];
-                        String avatarSeleccionado = partes[1];
-                        String colorSeleccionado = partes[2];
-                        String codigoSala = partes[3];
-
-                        // Buscar la sala por código
-                        Sala sala = buscarSala(codigoSala);
-
-                        if (sala != null) {
-                            // Verificar nombre de usuario en la sala
-                            if (!sala.jugadorExiste(nombreUsuario)) {
-                                // Usuario disponible, agregar a la lista de nombres de usuario de la sala
-                                sala.agregarJugador(new Jugador(nombreUsuario, avatarSeleccionado, Colores.getColor(colorSeleccionado)));
-                                out.println("OK"); // Confirmar al cliente que el nombre de usuario es válido
-                            } else {
-                                out.println("DUPLICADO"); // Informar al cliente que el nombre de usuario ya está en uso
-                            }
-                        } else {
-                            out.println("SALA_NO_EXISTE"); // Informar al cliente que la sala no existe
-                        }
-                    } else {
-                        System.out.println("Mensaje del cliente no tiene el formato esperado.");
-                    }
                 } else {
                     System.out.println("Mensaje nulo recibido del cliente.");
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
-
-        private Sala buscarSala(String codigo) {
-            for (Sala sala : salas) {
-                if (sala.getCodigo().equals(codigo)) {
-                    return sala;
-                }
-            }
-            return null;
         }
     }
 }

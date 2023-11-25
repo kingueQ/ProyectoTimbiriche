@@ -101,6 +101,14 @@ public class SocketCliente {
     public void setJugador(Jugador jugador) {
         this.jugador = jugador;
     }
-    
+
+    public String validarCodigoSala(String codigo) {
+        if (codigo.length() != 6) {
+            return "NO_EXISTE";
+        } else {
+            return "OK";
+        }
+    }
+
     
 }

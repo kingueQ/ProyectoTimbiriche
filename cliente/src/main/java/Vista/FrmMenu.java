@@ -5,10 +5,12 @@
  */
 package Vista;
 
+import Controlador.CtrlServidor;
 import Controlador.CtrlVistas;
 import Modelo.Sala;
 import SocketCliente.SocketCliente;
 import java.awt.Color;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -18,15 +20,17 @@ public class FrmMenu extends javax.swing.JFrame {
 
     CtrlVistas ctrlVistas = new CtrlVistas();
     SocketCliente socketCliente;
-    
+    CtrlServidor ctrlServidor;
+
     /**
      * Creates new form FrmMenu
      */
-    public FrmMenu(SocketCliente socketCliente) {
+    public FrmMenu(SocketCliente socketCliente, CtrlServidor ctrlServidor) {
         initComponents();
 
         this.getContentPane().setBackground(Color.BLACK);
-        this.socketCliente=socketCliente;
+        this.socketCliente = socketCliente;
+        this.ctrlServidor = ctrlServidor;
     }
 
     /**
@@ -115,7 +119,7 @@ public class FrmMenu extends javax.swing.JFrame {
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
         // TODO add your handling code here:
-        ctrlVistas.startApplication();
+        ctrlVistas.startApplication(this.ctrlServidor);
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_btnRegresarActionPerformed
@@ -131,19 +135,17 @@ public class FrmMenu extends javax.swing.JFrame {
         if (tipoSeleccionado != null) {
             // Seleccionó "Publica" o "Privada"
             if (tipoSeleccionado.equals("Publica")) {
-                Sala sala=ctrlVistas.crearSalaPublica();
-                sala.setDisponibilidad(sala.getDisponibilidad()-1);
-                sala.setNumJugadores(sala.getNumJugadores()+1);
+                Sala sala = ctrlVistas.crearSalaPublica();
                 sala.añadirJugador(socketCliente.getJugador());
-                ctrlVistas.mostrarSala(sala, socketCliente);
+                ctrlServidor.crearSala(sala);
+                ctrlVistas.mostrarSala(sala, socketCliente, this.ctrlServidor);
                 this.setVisible(false);
                 this.dispose();
-            }else{
-                Sala sala=ctrlVistas.crearSalaPrivada();
-                sala.setDisponibilidad(sala.getDisponibilidad()-1);
-                sala.setNumJugadores(sala.getNumJugadores()+1);
+            } else {
+                Sala sala = ctrlVistas.crearSalaPrivada();
                 sala.añadirJugador(socketCliente.getJugador());
-                ctrlVistas.mostrarSala(sala, socketCliente);
+                ctrlServidor.crearSala(sala);
+                ctrlVistas.mostrarSala(sala, socketCliente, this.ctrlServidor);
                 this.setVisible(false);
                 this.dispose();
             }
@@ -154,8 +156,45 @@ public class FrmMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCrearActionPerformed
 
     private void btnUnirseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUnirseActionPerformed
-        // TODO add your handling code here:
-//        ctrlVistas.crearSala();
+        DlgOpciones opciones = new DlgOpciones(this, true);
+        opciones.setVisible(true);
+
+        String tipoSeleccionado = opciones.getTipoSeleccionado();
+
+        if (tipoSeleccionado != null) {
+            // Seleccionó "Publica" o "Privada"
+            if (tipoSeleccionado.equals("Publica")) {
+                Sala sala = ctrlServidor.unirsePublica(this.socketCliente.getJugador());
+                if (sala != null) {
+                    ctrlVistas.mostrarSala(sala, socketCliente, this.ctrlServidor);
+                    this.setVisible(false);
+                    this.dispose();
+                } else {
+                    JOptionPane.showMessageDialog(this, "No hay salas disponibles");
+                }
+            } else {
+                DlgCodigo dlgCodigo = new DlgCodigo(this, true);
+                dlgCodigo.setVisible(true);
+
+                String codigo = dlgCodigo.getTipoSeleccionado();
+
+                if (codigo != null) {
+                    Sala sala = ctrlServidor.unirseSala(codigo, this.socketCliente.getJugador());
+                    if (sala != null) {
+                        ctrlVistas.mostrarSala(sala, socketCliente, this.ctrlServidor);
+                        this.setVisible(false);
+                        this.dispose();
+                    } else {
+                        JOptionPane.showMessageDialog(this, "No hay ninguna sala con ese codigo");
+                    }
+                }else{
+                    System.out.println("El codigo llego vacío");
+                }
+            }
+        } else {
+            // Cerró el diálogo sin seleccionar nada
+            System.out.println("Cerró el diálogo sin seleccionar nada.");
+        }
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_btnUnirseActionPerformed
