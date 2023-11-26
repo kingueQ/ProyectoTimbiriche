@@ -10,6 +10,7 @@ import Modelo.Modelo;
 import Modelo.Sala;
 import SocketCliente.SocketCliente;
 import Vista.Vista;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -43,8 +44,8 @@ public class CtrlVistas {
         return modelo.crearSalaPublica();
     }
 
-    public void iniciarJuego(List<Jugador> jugadores, SocketCliente socketCliente, CtrlServidor ctrlServidor) {
-        vista.showPartida(jugadores, socketCliente, ctrlServidor);
+    public void iniciarJuego(Sala datos, SocketCliente socketCliente, CtrlServidor ctrlServidor) {
+        vista.showPartida(datos, socketCliente, ctrlServidor);
     }
 
     public Sala crearSalaPrivada() {
@@ -55,4 +56,7 @@ public class CtrlVistas {
         vista.showPantallaSala(sala, socketCliente, ctrlServidor);
     }
 
+    public void finJuego(SocketCliente socketCliente, CtrlServidor ctrServidor, List<Jugador> jugadores){
+        vista.finJuego(socketCliente, ctrServidor, jugadores);
+    }
 }

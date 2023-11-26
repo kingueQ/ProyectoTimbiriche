@@ -10,6 +10,7 @@ import Controlador.CtrlVistas;
 import Modelo.Jugador;
 import Modelo.Sala;
 import SocketCliente.SocketCliente;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -64,9 +65,13 @@ public class Vista {
         pantallaSala.setVisible(true);
     }
     
-    public void showPartida(List<Jugador> jugadores, SocketCliente socketCliente, CtrlServidor ctrlServidor){
-        FrmPartida partida=new FrmPartida(jugadores, socketCliente, ctrlServidor);
+    public void showPartida(Sala datos, SocketCliente socketCliente, CtrlServidor ctrlServidor){
+        FrmPartida partida=new FrmPartida(datos, socketCliente, ctrlServidor);
         partida.setVisible(true);
     }
     
+    public void finJuego(SocketCliente socketCliente, CtrlServidor ctrServidor, List<Jugador> jugadores){
+        FrmFinJuego fin=new FrmFinJuego(socketCliente, ctrServidor, jugadores);
+        fin.setVisible(true);
+    }
 }

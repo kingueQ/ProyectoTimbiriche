@@ -5,8 +5,10 @@
  */
 package Controlador;
 
+import DominioDTO.TableroDTO;
 import Modelo.Jugador;
 import Modelo.Sala;
+import Modelo.Tablero;
 import SocketServidor.SocketServidor;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,5 +49,13 @@ public class CtrlServidor {
     
     public Sala listo(Sala sala, Jugador jugador){
         return this.servidor.listo(sala, jugador);
+    }
+    
+    public Tablero validarLinea(int fila, int columna, Tablero tablero){
+        return this.servidor.validarLinea(fila, columna, tablero);
+    }
+    
+    public TableroDTO verificarCuadro(Jugador jugador, Tablero tablero){
+        return this.servidor.verificarCuadro(jugador, tablero);
     }
 }

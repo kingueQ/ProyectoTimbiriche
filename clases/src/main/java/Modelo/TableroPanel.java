@@ -36,4 +36,14 @@ public class TableroPanel extends javax.swing.JPanel {
             }
         }
     }
+
+    public char[][] getMatrizTablero() {
+        return matrizTablero;
+    }
+
+    public void setMatrizTablero(char[][] matrizTablero) {
+        this.matrizTablero = matrizTablero;
+    }
+    
+    
 }

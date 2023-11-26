@@ -8,6 +8,7 @@ package Vista;
 import Controlador.CtrlServidor;
 import Controlador.CtrlVistas;
 import Modelo.Jugador;
+import Modelo.Partida;
 import Modelo.Sala;
 import SocketCliente.SocketCliente;
 import java.awt.Color;
@@ -187,7 +188,7 @@ public class FrmSala extends javax.swing.JFrame {
         // TODO add your handling code here:
         this.sala = ctrlServidor.listo(this.sala, this.socketCliente.getJugador());
         if (this.sala.getListos() == this.sala.getNumJugadores() && this.sala.getNumJugadores()>1) {
-            ctrlVistas.iniciarJuego(sala.getJugadores(), socketCliente, ctrlServidor);
+            ctrlVistas.iniciarJuego(this.sala, socketCliente, ctrlServidor);
             this.setVisible(false);
             this.dispose();
         }

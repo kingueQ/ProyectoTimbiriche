@@ -10,7 +10,8 @@ import java.net.Socket;
 
 public class SocketCliente {
 
-    private static final String SERVIDOR_IP = "192.168.1.64";
+    //192.168.1.64
+    private static final String SERVIDOR_IP = "localhost";
     private static final int PUERTO = 12345;
 
     private Jugador jugador;

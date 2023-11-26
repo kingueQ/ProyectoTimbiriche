@@ -18,8 +18,7 @@ public class Partida {
     public Partida() {
     }
 
-    public Partida(int jugadores, Sala datos, Tablero tablero, int cuadrosLlenos) {
-        this.jugadores = jugadores;
+    public Partida(Sala datos, Tablero tablero, int cuadrosLlenos) {
         this.datos = datos;
         this.tablero = tablero;
         this.cuadrosLlenos = cuadrosLlenos;

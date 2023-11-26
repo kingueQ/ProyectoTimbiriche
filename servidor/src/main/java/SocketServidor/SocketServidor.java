@@ -5,9 +5,12 @@
  */
 package SocketServidor;
 
+import DominioDTO.TableroDTO;
 import Modelo.Colores;
 import Modelo.Jugador;
+import Modelo.Partida;
 import Modelo.Sala;
+import Modelo.Tablero;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -122,6 +125,25 @@ public class SocketServidor {
             }
         }
         return sala;
+    }
+    
+    public Tablero validarLinea(int fila, int columna, Tablero tablero){
+        char[][] campo=tablero.dibujarLinea(fila, columna);
+        if(campo!=null){
+            tablero.setTablero(campo);
+            return tablero;
+        }else{
+            return null;
+        }
+    }
+    
+    public TableroDTO verificarCuadro(Jugador jugador, Tablero tablero){
+        TableroDTO campo=tablero.validarCuadro(jugador);
+        if(campo!=null){
+            return campo;
+        }else{
+            return null;
+        }
     }
 
     private class ClientHandler implements Runnable {

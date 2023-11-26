@@ -172,6 +172,7 @@ public class FrmRegistro extends javax.swing.JFrame {
         // TODO add your handling code here:
         String nombreUsuario = this.txtUsuario.getText();
         String avatarSeleccionado = (String) this.cbxAvatar.getSelectedItem();
+        System.out.println(avatarSeleccionado);
         String colorSeleccionado = (String) this.cbxColor.getSelectedItem();
         
         Jugador jugador=new Jugador(nombreUsuario, avatarSeleccionado, Colores.getColor(colorSeleccionado));
