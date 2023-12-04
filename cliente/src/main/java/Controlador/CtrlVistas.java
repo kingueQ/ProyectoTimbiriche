@@ -28,35 +28,35 @@ public class CtrlVistas {
         this.modelo = new Modelo();
     }
 
-    public void startApplication(CtrlServidor ctrlServidor) {
-        vista.showPantallaInicio(ctrlServidor);
+    public void startApplication() {
+        vista.showPantallaInicio();
     }
 
-    public void showRegistro(SocketCliente socketCliente, CtrlServidor ctrlServidor) {
-        vista.showPantallaRegistro(socketCliente, ctrlServidor);
+    public void showRegistro(SocketCliente socketCliente) {
+        vista.showPantallaRegistro(socketCliente);
     }
 
-    public void showMenu(SocketCliente socketCliente, CtrlServidor ctrlServidor) {
-        vista.showPantallaMenu(socketCliente, ctrlServidor);
+    public void showMenu(SocketCliente socketCliente) {
+        vista.showPantallaMenu(socketCliente);
     }
 
     public Sala crearSalaPublica() {
         return modelo.crearSalaPublica();
     }
 
-    public void iniciarJuego(Sala datos, SocketCliente socketCliente, CtrlServidor ctrlServidor) {
-        vista.showPartida(datos, socketCliente, ctrlServidor);
+    public void iniciarJuego(Sala datos, SocketCliente socketCliente) {
+        vista.showPartida(datos, socketCliente);
     }
 
     public Sala crearSalaPrivada() {
         return modelo.crearSalaPrivada();
     }
 
-    public void mostrarSala(Sala sala, SocketCliente socketCliente, CtrlServidor ctrlServidor) {
-        vista.showPantallaSala(sala, socketCliente, ctrlServidor);
+    public void mostrarSala(Sala sala, SocketCliente socketCliente) {
+        vista.showPantallaSala(sala, socketCliente);
     }
 
-    public void finJuego(SocketCliente socketCliente, CtrlServidor ctrServidor, List<Jugador> jugadores){
-        vista.finJuego(socketCliente, ctrServidor, jugadores);
+    public void finJuego(SocketCliente socketCliente, List<Jugador> jugadores){
+        vista.finJuego(socketCliente, jugadores);
     }
 }

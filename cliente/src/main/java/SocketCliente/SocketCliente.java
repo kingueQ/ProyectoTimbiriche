@@ -14,13 +14,16 @@ import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class SocketCliente implements ServidorObserver {
 
-    //192.168.1.64 10.175.1.100
-    private static final String SERVIDOR_IP = "10.178.1.177";
+    private static final String SERVIDOR_IP = "192.168.1.65";
     private static final int PUERTO = 12345;
 
     private Jugador jugador;
@@ -28,85 +31,70 @@ public class SocketCliente implements ServidorObserver {
     private BufferedReader in;
     private PrintWriter out;
     private List<InterfazObserver> observadores = new ArrayList<>();
+    private boolean isRunning;
 
     public SocketCliente() {
         try {
-            socket = new Socket(SERVIDOR_IP, PUERTO);
-            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            out = new PrintWriter(socket.getOutputStream(), true);
-            iniciarHiloEscucha();
+            this.establecerConexion();
             SocketServidor.getInstance().agregarObservador(this);
+            isRunning = true;
+//            new Thread(this::escucharMensajes).start();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void iniciarHiloEscucha() {
-        Thread hiloEscucha = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    while (true) {
-                        String respuesta = recibirRespuesta();
-                        // Maneja la respuesta según tus necesidades
-                        System.out.println("Respuesta del servidor: " + respuesta);
-                        // Aquí puedes actualizar tu interfaz gráfica con la respuesta recibida
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        hiloEscucha.start();
+    private void establecerConexion() throws IOException {
+        socket = new Socket(SERVIDOR_IP, PUERTO);
+        in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        out = new PrintWriter(socket.getOutputStream(), true);
     }
 
-    private void enviarMensaje(final String mensaje) {
-        SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
-            @Override
-            protected Void doInBackground() throws Exception {
-                try {
-                    out.println(mensaje);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                return null;
-            }
-        };
-
-        worker.execute();
-    }
-
-    private String recibirRespuesta() throws IOException {
-        return in.readLine();
-    }
-
-    public String validarRegistro(final String nombreUsuario, final String avatarSeleccionado, final String colorSeleccionado) {
-        SwingWorker<String, Void> worker = new SwingWorker<String, Void>() {
-            @Override
-            protected String doInBackground() throws Exception {
-                try {
-                    enviarMensaje("REGISTRO," + nombreUsuario + "," + avatarSeleccionado + "," + colorSeleccionado);
-                    return recibirRespuesta();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    return "ERROR";
-                }
-            }
-        };
-
-        worker.execute();
-
+    private void escucharMensajes() {
         try {
-            return worker.get(); // Espera hasta que el SwingWorker termine
+            while (isRunning) {
+                String mensaje = recibirRespuesta();
+                if (mensaje != null && mensaje.equals("CONEXION_CERRADA")) {
+                    isRunning = false;
+                    cerrarConexion();
+                } else {
+                    notificarObservadores(mensaje);
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
-            return "ERROR";
+        }
+    }
+
+    private void enviarMensaje(String mensaje) throws IOException {
+        this.establecerConexion();
+        try {
+            if (socket != null && socket.isConnected() && !socket.isClosed()) {
+                out.println(mensaje);
+            } else {
+                System.err.println("El socket está cerrado o no conectado.");
+            }
+        } catch (Exception e) {
+            System.err.println("Error al enviar mensaje: " + e.getMessage());
+            e.printStackTrace();
+        } 
+    }
+
+    private String recibirRespuesta() {
+        try {
+            return in.readLine();
+        } catch (SocketException se) {
+            se.printStackTrace();
+            return "CONEXION_CERRADA";
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "ERROR_DE_LECTURA";
         }
     }
 
     public void cerrarConexion() {
         try {
+            isRunning = false;
             if (in != null) {
                 in.close();
             }
@@ -119,6 +107,30 @@ public class SocketCliente implements ServidorObserver {
         } catch (IOException e) {
             System.err.println("Error al cerrar la conexión: " + e.getMessage());
             e.printStackTrace();
+        }
+    }
+
+    public Boolean validarRegistro(final String nombreUsuario, final String avatarSeleccionado, final String colorSeleccionado) {
+        SwingWorker<Boolean, Void> worker = new SwingWorker<Boolean, Void>() {
+            @Override
+            protected Boolean doInBackground() throws Exception {
+                try {
+                    enviarMensaje("REGISTRO," + nombreUsuario + "," + avatarSeleccionado + "," + colorSeleccionado);
+                    ObjectInputStream objectIn = new ObjectInputStream(socket.getInputStream());
+                    boolean res = (boolean) objectIn.readObject();
+                    return res;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return false;
+                }
+            }
+        };
+        worker.execute();
+        try {
+            return worker.get();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false; // Devuelve false en caso de excepción
         }
     }
 
@@ -144,27 +156,21 @@ public class SocketCliente implements ServidorObserver {
             protected Sala doInBackground() throws Exception {
                 try {
                     enviarMensaje("UNIRSEASALA," + codigo + "," + nombreUsuario);
-
-                    // Aquí puedes esperar la respuesta del servidor, que debería ser un objeto Sala
-                    // Asegúrate de manejar la deserialización correctamente
                     ObjectInputStream objectIn = new ObjectInputStream(socket.getInputStream());
                     Sala salaRecibida = (Sala) objectIn.readObject();
-
                     return salaRecibida;
                 } catch (Exception e) {
                     e.printStackTrace();
-                    return null; // Maneja el error según tus necesidades
+                    return null;
                 }
             }
         };
-
         worker.execute();
-
         try {
-            return worker.get(); // Espera hasta que el SwingWorker termine
+            return worker.get();
         } catch (Exception e) {
             e.printStackTrace();
-            return null; // Maneja el error según tus necesidades
+            return null;
         }
     }
 
@@ -174,27 +180,21 @@ public class SocketCliente implements ServidorObserver {
             protected Sala doInBackground() throws Exception {
                 try {
                     enviarMensaje("UNIRSEPUBLICA," + nombreUsuario);
-
-                    // Aquí puedes esperar la respuesta del servidor, que debería ser un objeto Sala
-                    // Asegúrate de manejar la deserialización correctamente
                     ObjectInputStream objectIn = new ObjectInputStream(socket.getInputStream());
                     Sala salaRecibida = (Sala) objectIn.readObject();
-
                     return salaRecibida;
                 } catch (Exception e) {
                     e.printStackTrace();
-                    return null; // Maneja el error según tus necesidades
+                    return null;
                 }
             }
         };
-
         worker.execute();
-
         try {
-            return worker.get(); // Espera hasta que el SwingWorker termine
+            return worker.get();
         } catch (Exception e) {
             e.printStackTrace();
-            return null; // Maneja el error según tus necesidades
+            return null;
         }
     }
 
@@ -204,27 +204,21 @@ public class SocketCliente implements ServidorObserver {
             protected Sala doInBackground() throws Exception {
                 try {
                     enviarMensaje("CREARSALA," + jugador + "," + codigo);
-
-                    // Aquí puedes esperar la respuesta del servidor, que debería ser un objeto Sala
-                    // Asegúrate de manejar la deserialización correctamente
                     ObjectInputStream objectIn = new ObjectInputStream(socket.getInputStream());
                     Sala salaRecibida = (Sala) objectIn.readObject();
-
                     return salaRecibida;
                 } catch (Exception e) {
                     e.printStackTrace();
-                    return null; // Maneja el error según tus necesidades
+                    return null;
                 }
             }
         };
-
         worker.execute();
-
         try {
-            return worker.get(); // Espera hasta que el SwingWorker termine
+            return worker.get();
         } catch (Exception e) {
             e.printStackTrace();
-            return null; // Maneja el error según tus necesidades
+            return null;
         }
     }
 
@@ -234,27 +228,21 @@ public class SocketCliente implements ServidorObserver {
             protected Sala doInBackground() throws Exception {
                 try {
                     enviarMensaje("ELIMINARJUGADOR," + jugador);
-
-                    // Aquí puedes esperar la respuesta del servidor, que debería ser un objeto Sala
-                    // Asegúrate de manejar la deserialización correctamente
                     ObjectInputStream objectIn = new ObjectInputStream(socket.getInputStream());
                     Sala salaRecibida = (Sala) objectIn.readObject();
-
                     return salaRecibida;
                 } catch (Exception e) {
                     e.printStackTrace();
-                    return null; // Maneja el error según tus necesidades
+                    return null;
                 }
             }
         };
-
         worker.execute();
-
         try {
-            return worker.get(); // Espera hasta que el SwingWorker termine
+            return worker.get();
         } catch (Exception e) {
             e.printStackTrace();
-            return null; // Maneja el error según tus necesidades
+            return null;
         }
     }
 
@@ -264,27 +252,21 @@ public class SocketCliente implements ServidorObserver {
             protected Sala doInBackground() throws Exception {
                 try {
                     enviarMensaje("LISTO," + jugador);
-
-                    // Aquí puedes esperar la respuesta del servidor, que debería ser un objeto Sala
-                    // Asegúrate de manejar la deserialización correctamente
                     ObjectInputStream objectIn = new ObjectInputStream(socket.getInputStream());
                     Sala salaRecibida = (Sala) objectIn.readObject();
-
                     return salaRecibida;
                 } catch (Exception e) {
                     e.printStackTrace();
-                    return null; // Maneja el error según tus necesidades
+                    return null;
                 }
             }
         };
-
         worker.execute();
-
         try {
-            return worker.get(); // Espera hasta que el SwingWorker termine
+            return worker.get();
         } catch (Exception e) {
             e.printStackTrace();
-            return null; // Maneja el error según tus necesidades
+            return null;
         }
     }
 
@@ -293,28 +275,22 @@ public class SocketCliente implements ServidorObserver {
             @Override
             protected TableroDTO doInBackground() throws Exception {
                 try {
-                    enviarMensaje("HACERMOVIMIENTO," + fila + columna + jugador);
-
-                    // Aquí puedes esperar la respuesta del servidor, que debería ser un objeto Sala
-                    // Asegúrate de manejar la deserialización correctamente
+                    enviarMensaje("HACERMOVIMIENTO," + fila + "," + columna + "," + jugador);
                     ObjectInputStream objectIn = new ObjectInputStream(socket.getInputStream());
                     TableroDTO salaRecibida = (TableroDTO) objectIn.readObject();
-
                     return salaRecibida;
                 } catch (Exception e) {
                     e.printStackTrace();
-                    return null; // Maneja el error según tus necesidades
+                    return null;
                 }
             }
         };
-
         worker.execute();
-
         try {
-            return worker.get(); // Espera hasta que el SwingWorker termine
+            return worker.get();
         } catch (Exception e) {
             e.printStackTrace();
-            return null; // Maneja el error según tus necesidades
+            return null;
         }
     }
 
@@ -331,11 +307,9 @@ public class SocketCliente implements ServidorObserver {
                 }
             }
         };
-
         worker.execute();
-
         try {
-            return worker.get(); // Espera hasta que el SwingWorker termine
+            return worker.get();
         } catch (Exception e) {
             e.printStackTrace();
             return "ERROR";
@@ -344,85 +318,90 @@ public class SocketCliente implements ServidorObserver {
 
     @Override
     public void actualizar(String mensaje) {
-        // Manejar la actualización según tus necesidades
         System.out.println("Actualización del servidor: " + mensaje);
-
         if (mensaje.equals("SALA_ACTUALIZADA")) {
             notificarObservadores("SALA_ACTUALIZADA");
         } else if (mensaje.equals("PARTIDA_ACTUALIZADA")) {
             notificarObservadores("PARTIDA_ACTUALIZADA");
         }
-
-        // Actualizar la interfaz gráfica aquí
     }
-    
+
     public void notificarObservadores(String mensaje) {
         for (InterfazObserver observador : observadores) {
             observador.actualizar(mensaje);
         }
     }
-    
+
     public void agregarObservador(InterfazObserver observador) {
         observadores.add(observador);
     }
-    
-    public Sala obtenerSala(){
+
+    public Sala obtenerSala() {
         SwingWorker<Sala, Void> worker = new SwingWorker<Sala, Void>() {
             @Override
             protected Sala doInBackground() throws Exception {
                 try {
                     enviarMensaje("SALAACTUALIZADA," + jugador.getUsuario());
-
-                    // Aquí puedes esperar la respuesta del servidor, que debería ser un objeto Sala
-                    // Asegúrate de manejar la deserialización correctamente
                     ObjectInputStream objectIn = new ObjectInputStream(socket.getInputStream());
                     Sala salaRecibida = (Sala) objectIn.readObject();
-
                     return salaRecibida;
                 } catch (Exception e) {
                     e.printStackTrace();
-                    return null; // Maneja el error según tus necesidades
+                    return null;
                 }
             }
         };
-
         worker.execute();
-
         try {
-            return worker.get(); // Espera hasta que el SwingWorker termine
+            return worker.get();
         } catch (Exception e) {
             e.printStackTrace();
-            return null; // Maneja el error según tus necesidades
+            return null;
         }
     }
-    
-    public Partida obtenerPartida(){
+
+    public Partida obtenerPartida() {
         SwingWorker<Partida, Void> worker = new SwingWorker<Partida, Void>() {
             @Override
             protected Partida doInBackground() throws Exception {
                 try {
                     enviarMensaje("PARTIDAACTUALIZADA," + jugador.getUsuario());
-
-                    // Aquí puedes esperar la respuesta del servidor, que debería ser un objeto Sala
-                    // Asegúrate de manejar la deserialización correctamente
                     ObjectInputStream objectIn = new ObjectInputStream(socket.getInputStream());
                     Partida partidaRecibida = (Partida) objectIn.readObject();
-
                     return partidaRecibida;
                 } catch (Exception e) {
                     e.printStackTrace();
-                    return null; // Maneja el error según tus necesidades
+                    return null;
                 }
             }
         };
-
         worker.execute();
-
         try {
-            return worker.get(); // Espera hasta que el SwingWorker termine
+            return worker.get();
         } catch (Exception e) {
             e.printStackTrace();
-            return null; // Maneja el error según tus necesidades
+            return null;
         }
+    }
+
+    public void iniciarJuego() {
+        SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+            @Override
+            protected Void doInBackground() throws Exception {
+                try {
+                    enviarMensaje("INICIARJUEGO," + jugador.getUsuario());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    cerrarConexion();
+                }
+                return null;
+            }
+        };
+        worker.execute();
+    }
+
+    public void eliminarObservador() {
+        SocketServidor.getInstance().eliminarObservador(this);
     }
 }

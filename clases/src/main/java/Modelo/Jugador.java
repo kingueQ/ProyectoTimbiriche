@@ -6,12 +6,13 @@
 package Modelo;
 
 import java.awt.Color;
+import java.io.Serializable;
 
 /**
  *
  * @author kingu
  */
-public class Jugador {
+public class Jugador implements Serializable{
     private String usuario;
     private int puntuacion=0;
     private String avatar;

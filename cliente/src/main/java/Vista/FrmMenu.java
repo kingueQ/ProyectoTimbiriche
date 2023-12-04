@@ -20,17 +20,15 @@ public class FrmMenu extends javax.swing.JFrame {
 
     CtrlVistas ctrlVistas = new CtrlVistas();
     SocketCliente socketCliente;
-    CtrlServidor ctrlServidor;
 
     /**
      * Creates new form FrmMenu
      */
-    public FrmMenu(SocketCliente socketCliente, CtrlServidor ctrlServidor) {
+    public FrmMenu(SocketCliente socketCliente) {
         initComponents();
 
         this.getContentPane().setBackground(Color.BLACK);
         this.socketCliente = socketCliente;
-        this.ctrlServidor = ctrlServidor;
     }
 
     /**
@@ -119,7 +117,7 @@ public class FrmMenu extends javax.swing.JFrame {
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
         // TODO add your handling code here:
-        ctrlVistas.startApplication(this.ctrlServidor);
+        ctrlVistas.startApplication();
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_btnRegresarActionPerformed
@@ -135,17 +133,13 @@ public class FrmMenu extends javax.swing.JFrame {
         if (tipoSeleccionado != null) {
             // Seleccionó "Publica" o "Privada"
             if (tipoSeleccionado.equals("Publica")) {
-                Sala sala = ctrlVistas.crearSalaPublica();
-                sala.añadirJugador(socketCliente.getJugador());
-                ctrlServidor.crearSala(sala);
-                ctrlVistas.mostrarSala(sala, socketCliente, this.ctrlServidor);
+                Sala sala = this.socketCliente.crearSala(this.socketCliente.getJugador().getUsuario(), "PUBLICA");
+                ctrlVistas.mostrarSala(sala, socketCliente);
                 this.setVisible(false);
                 this.dispose();
             } else {
-                Sala sala = ctrlVistas.crearSalaPrivada();
-                sala.añadirJugador(socketCliente.getJugador());
-                ctrlServidor.crearSala(sala);
-                ctrlVistas.mostrarSala(sala, socketCliente, this.ctrlServidor);
+                Sala sala = this.socketCliente.crearSala(this.socketCliente.getJugador().getUsuario(), "PRIVADA");
+                ctrlVistas.mostrarSala(sala, socketCliente);
                 this.setVisible(false);
                 this.dispose();
             }
@@ -164,9 +158,9 @@ public class FrmMenu extends javax.swing.JFrame {
         if (tipoSeleccionado != null) {
             // Seleccionó "Publica" o "Privada"
             if (tipoSeleccionado.equals("Publica")) {
-                Sala sala = ctrlServidor.unirsePublica(this.socketCliente.getJugador());
+                Sala sala = this.socketCliente.unirsePublica(this.socketCliente.getJugador().getUsuario());
                 if (sala != null) {
-                    ctrlVistas.mostrarSala(sala, socketCliente, this.ctrlServidor);
+                    ctrlVistas.mostrarSala(sala, socketCliente);
                     this.setVisible(false);
                     this.dispose();
                 } else {
@@ -179,9 +173,9 @@ public class FrmMenu extends javax.swing.JFrame {
                 String codigo = dlgCodigo.getTipoSeleccionado();
 
                 if (codigo != null) {
-                    Sala sala = ctrlServidor.unirseSala(codigo, this.socketCliente.getJugador());
+                    Sala sala = this.socketCliente.unirseASala(codigo, this.socketCliente.getJugador().getUsuario());
                     if (sala != null) {
-                        ctrlVistas.mostrarSala(sala, socketCliente, this.ctrlServidor);
+                        ctrlVistas.mostrarSala(sala, socketCliente);
                         this.setVisible(false);
                         this.dispose();
                     } else {

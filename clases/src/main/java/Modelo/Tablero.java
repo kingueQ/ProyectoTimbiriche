@@ -6,12 +6,13 @@
 package Modelo;
 
 import DominioDTO.TableroDTO;
+import java.io.Serializable;
 
 /**
  *
  * @author kingu
  */
-public class Tablero {
+public class Tablero  implements Serializable{
     private int tamanio;
     private int numJugadores;
     private char[][] tablero;

@@ -33,11 +33,10 @@ public class FrmRegistro extends javax.swing.JFrame {
     private Avatar avatar;
     CtrlVistas controlador = new CtrlVistas();
     private SocketCliente socketCliente;
-    CtrlServidor ctrlServidor;
     /**
      * Creates new form FrmRegistro
      */
-    public FrmRegistro(SocketCliente socketCliente, CtrlServidor ctrlServidor) {
+    public FrmRegistro(SocketCliente socketCliente) {
         initComponents();
 
         this.getContentPane().setBackground(Color.BLACK);
@@ -46,7 +45,6 @@ public class FrmRegistro extends javax.swing.JFrame {
         llenarComboBoxColores();
 
         this.socketCliente = socketCliente;
-        this.ctrlServidor=ctrlServidor;
     }
 
     /**
@@ -163,7 +161,7 @@ public class FrmRegistro extends javax.swing.JFrame {
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
         // TODO add your handling code here:
-        controlador.startApplication(this.ctrlServidor);
+        controlador.startApplication();
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_btnRegresarActionPerformed
@@ -175,10 +173,11 @@ public class FrmRegistro extends javax.swing.JFrame {
         System.out.println(avatarSeleccionado);
         String colorSeleccionado = (String) this.cbxColor.getSelectedItem();
         
-        Jugador jugador=new Jugador(nombreUsuario, avatarSeleccionado, Colores.getColor(colorSeleccionado));
-        if (ctrlServidor.agregarJugador(jugador)) {
+        boolean res=this.socketCliente.validarRegistro(nombreUsuario, avatarSeleccionado, colorSeleccionado);
+        System.out.println("La res es " + res);
+        if (res) {
             this.socketCliente.setJugador(new Jugador(nombreUsuario, avatarSeleccionado, Colores.getColor(colorSeleccionado)));
-            controlador.showMenu(this.socketCliente, this.ctrlServidor);
+            controlador.showMenu(this.socketCliente);
             this.setVisible(false);
             this.dispose();
         } else {

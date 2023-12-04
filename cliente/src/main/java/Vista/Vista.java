@@ -35,23 +35,23 @@ public class Vista {
         this.frame.add(panel);
     }
 
-    public void showPantallaInicio(CtrlServidor ctrlServidor) {
+    public void showPantallaInicio() {
         // Implementar la pantalla de inicio aquí.
-        FrmInicio inicio=new FrmInicio(ctrlServidor);
+        FrmInicio inicio=new FrmInicio();
         inicio.setVisible(true);
         // Usar ActionListener para el botón "Ingresar" y "Salir".
     }
 
-    public void showPantallaRegistro(SocketCliente socketCliente, CtrlServidor ctrlServidor) {
+    public void showPantallaRegistro(SocketCliente socketCliente) {
         // Implementar la pantalla de registro aquí.
-        FrmRegistro registro=new FrmRegistro(socketCliente, ctrlServidor);
+        FrmRegistro registro=new FrmRegistro(socketCliente);
         registro.setVisible(true);
         // Usar ActionListener para el botón "Ingresar".
     }
 
-    public void showPantallaMenu(SocketCliente socketCliente, CtrlServidor ctrlServidor) {
+    public void showPantallaMenu(SocketCliente socketCliente) {
         // Implementar la pantalla de menú aquí.
-        FrmMenu menu=new FrmMenu(socketCliente, ctrlServidor);
+        FrmMenu menu=new FrmMenu(socketCliente);
         menu.setVisible(true);
         // Usar ActionListener para las opciones del menú.
     }
@@ -60,18 +60,18 @@ public class Vista {
         JOptionPane.showMessageDialog(frame, mensaje);
     }
     
-    public void showPantallaSala(Sala sala, SocketCliente socketCliente, CtrlServidor ctrlServidor){
-        FrmSala pantallaSala=new FrmSala(sala, socketCliente, ctrlServidor);
+    public void showPantallaSala(Sala sala, SocketCliente socketCliente){
+        FrmSala pantallaSala=new FrmSala(sala, socketCliente);
         pantallaSala.setVisible(true);
     }
     
-    public void showPartida(Sala datos, SocketCliente socketCliente, CtrlServidor ctrlServidor){
-        FrmPartida partida=new FrmPartida(datos, socketCliente, ctrlServidor);
+    public void showPartida(Sala datos, SocketCliente socketCliente){
+        FrmPartida partida=new FrmPartida(datos, socketCliente);
         partida.setVisible(true);
     }
     
-    public void finJuego(SocketCliente socketCliente, CtrlServidor ctrServidor, List<Jugador> jugadores){
-        FrmFinJuego fin=new FrmFinJuego(socketCliente, ctrServidor, jugadores);
+    public void finJuego(SocketCliente socketCliente, List<Jugador> jugadores){
+        FrmFinJuego fin=new FrmFinJuego(socketCliente, jugadores);
         fin.setVisible(true);
     }
 }

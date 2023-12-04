@@ -31,18 +31,16 @@ public class FrmSala extends javax.swing.JFrame implements InterfazObserver{
     SocketCliente socketCliente;
     Sala sala;
     CtrlVistas ctrlVistas = new CtrlVistas();
-    CtrlServidor ctrlServidor;
 
     /**
      * Creates new form FrmSala
      */
-    public FrmSala(Sala sala, SocketCliente socketCliente, CtrlServidor ctrlServidor) {
+    public FrmSala(Sala sala, SocketCliente socketCliente) {
         initComponents();
 
         this.getContentPane().setBackground(Color.BLACK);
         this.sala = sala;
         this.socketCliente = socketCliente;
-        this.ctrlServidor = ctrlServidor;
         this.actualizarTabla(sala.getJugadores());
         this.lblCodigo.setText(sala.getCodigo());
 
@@ -181,7 +179,7 @@ public class FrmSala extends javax.swing.JFrame implements InterfazObserver{
         int respuesta = JOptionPane.showConfirmDialog(this, "Estas seguro que deseas abandonar la sala?");
         if (respuesta == 0) {
 //            ctrlServidor.eliminarJugadorSala(this.sala, this.socketCliente.getJugador());
-            ctrlVistas.showMenu(socketCliente, ctrlServidor);
+            ctrlVistas.showMenu(socketCliente);
             this.setVisible(false);
             this.dispose();
         }
@@ -189,9 +187,19 @@ public class FrmSala extends javax.swing.JFrame implements InterfazObserver{
 
     private void btnListoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListoActionPerformed
         // TODO add your handling code here:
-        this.sala = ctrlServidor.listo(this.sala, this.socketCliente.getJugador());
+        this.sala = this.socketCliente.listo(this.socketCliente.getJugador().getUsuario());
+        if(this.sala==null){
+            System.out.println("nulo");
+            return;
+        }else{
+            System.out.println("tiene algo");
+        }
         if (this.sala.getListos() == this.sala.getNumJugadores() && this.sala.getNumJugadores()>1) {
-            ctrlVistas.iniciarJuego(this.sala, socketCliente, ctrlServidor);
+//            if(this.sala.getJugadores().get(1).getUsuario().equals(this.socketCliente.getJugador().getUsuario())){
+                this.socketCliente.iniciarJuego();
+                System.out.println("hecho");
+//            }
+            ctrlVistas.iniciarJuego(this.sala, this.socketCliente);
             this.setVisible(false);
             this.dispose();
         }

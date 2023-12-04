@@ -5,11 +5,13 @@
  */
 package Modelo;
 
+import java.io.Serializable;
+
 /**
  *
  * @author kingu
  */
-public class Partida {
+public class Partida implements Serializable{
     private int jugadores;
     private Sala datos;
     private Tablero tablero;

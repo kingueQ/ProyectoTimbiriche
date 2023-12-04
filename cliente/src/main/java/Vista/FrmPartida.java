@@ -34,7 +34,6 @@ public class FrmPartida extends javax.swing.JFrame implements InterfazObserver {
     CtrlJuego ctrlJuego = new CtrlJuego();
     List<Jugador> jugadores;
     SocketCliente socketCliente;
-    CtrlServidor ctrlServidor;
     private int indiceTurnoActual = 0;
     Jugador jugadorActual;
     Sala datos;
@@ -44,10 +43,10 @@ public class FrmPartida extends javax.swing.JFrame implements InterfazObserver {
     /**
      * Creates new form Partida
      */
-    public FrmPartida(Sala datos, SocketCliente socketCliente, CtrlServidor ctrlServidor) {
+    public FrmPartida(Sala datos, SocketCliente socketCliente) {
         this.socketCliente = socketCliente;
-        this.ctrlServidor = ctrlServidor;
         this.partida = this.socketCliente.obtenerPartida();
+        this.jugadores=this.partida.getDatos().getJugadores();
         initComponents();
 
         this.getContentPane().setBackground(Color.BLACK);
@@ -75,7 +74,6 @@ public class FrmPartida extends javax.swing.JFrame implements InterfazObserver {
             }
         });
 
-        Collections.shuffle(this.jugadores);
         this.cargarJugadores();
         this.siguienteTurno();
     }
@@ -280,7 +278,7 @@ public class FrmPartida extends javax.swing.JFrame implements InterfazObserver {
     private void btnAbandonarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAbandonarActionPerformed
         // TODO add your handling code here:
         CtrlVistas controlador = new CtrlVistas();
-        controlador.showMenu(this.socketCliente, this.ctrlServidor);
+        controlador.showMenu(this.socketCliente);
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_btnAbandonarActionPerformed
@@ -334,7 +332,7 @@ public class FrmPartida extends javax.swing.JFrame implements InterfazObserver {
             if (this.partida.getCuadrosLlenos() == this.partida.getTablero().getTotalCuadros()) {
                 JOptionPane.showMessageDialog(this, "El juego ha terminado");
                 CtrlVistas ctrl = new CtrlVistas();
-                ctrl.finJuego(this.socketCliente, ctrlServidor, this.partida.getDatos().getJugadores());
+                ctrl.finJuego(this.socketCliente, this.partida.getDatos().getJugadores());
                 this.setVisible(false);
                 this.dispose();
             }

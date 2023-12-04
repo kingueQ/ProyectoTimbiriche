@@ -25,15 +25,13 @@ public class FrmFinJuego extends javax.swing.JFrame {
 
     List<Jugador> jugadores;
     SocketCliente socketCliente;
-    CtrlServidor ctrlServidor;
 
     /**
      * Creates new form FrmFinJuego
      */
-    public FrmFinJuego(SocketCliente socketCliente, CtrlServidor ctrlServidor, List<Jugador> jugadores) {
+    public FrmFinJuego(SocketCliente socketCliente, List<Jugador> jugadores) {
         this.jugadores = jugadores;
         this.socketCliente = socketCliente;
-        this.ctrlServidor = ctrlServidor;
         initComponents();
 
         Collections.sort(jugadores, Comparator.comparingInt(Jugador::getPuntuacion).reversed());
@@ -192,8 +190,9 @@ public class FrmFinJuego extends javax.swing.JFrame {
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
         // TODO add your handling code here:
+        this.socketCliente.finalizarJuego(this.socketCliente.getJugador().getUsuario());
         CtrlVistas ctrlVistas = new CtrlVistas();
-        ctrlVistas.showMenu(socketCliente, ctrlServidor);
+        ctrlVistas.showMenu(socketCliente);
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_btnSalirActionPerformed

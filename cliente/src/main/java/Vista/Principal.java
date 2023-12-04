@@ -17,7 +17,6 @@ public class Principal {
 
         // Iniciar la aplicación desde el controlador de vistas
         CtrlVistas controlador = new CtrlVistas();
-        CtrlServidor ctrlServidor = new CtrlServidor(servidor);
-        controlador.startApplication(ctrlServidor);
+        controlador.startApplication();
     }
 }

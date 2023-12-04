@@ -28,7 +28,7 @@ import java.util.List;
 
 public class SocketServidor {
 
-    private static final int PUERTO = 1234;
+    private static final int PUERTO = 12345;
     private List<Jugador> jugadores = new ArrayList<>();
     private ServerSocket serverSocket;
     private List<Sala> salas = new ArrayList<>();
@@ -51,16 +51,6 @@ public class SocketServidor {
             }
         } catch (IOException e) {
             e.printStackTrace();
-        }
-    }
-
-    public void agregarCliente(PrintWriter out) {
-        clientesConectados.add(out);
-    }
-
-    public void enviarBroadcast(String mensaje) {
-        for (PrintWriter out : clientesConectados) {
-            out.println(mensaje);
         }
     }
 
@@ -211,31 +201,32 @@ public class SocketServidor {
         @Override
         public void run() {
             try {
-                agregarCliente(out);
-                // Manejar la lógica de comunicación con el cliente
                 String mensajeCliente = in.readLine();
 
                 if (mensajeCliente != null) {
                     System.out.println("Mensaje del cliente: " + mensajeCliente);
 
-                    // Dividir el mensaje en partes
                     String[] partes = mensajeCliente.split(",");
 
-                    // Lógica de procesamiento basada en el contenido del mensaje
                     if (partes.length > 0) {
                         String comando = partes[0];
 
-                        // Ejemplo de lógica para un comando específico
                         if (comando.equals("REGISTRO")) {
                             String nombre = partes[1];
-                            Color color = Colores.getColor(partes[2]);
-                            String avatar = partes[3];
+                            Color color = Colores.getColor(partes[3]);
+                            String avatar = partes[2];
                             Jugador jugador = new Jugador(nombre, avatar, color);
+                            boolean res;
                             if (agregarJugador(jugador)) {
+                                res = true;
                                 System.out.println("Usuario registrado correctamente");
                             } else {
+                                res = false;
                                 System.out.println("El usuario ya se encuentra registrado");
                             }
+                            ObjectOutputStream objectOut = new ObjectOutputStream(clientSocket.getOutputStream());
+                            objectOut.writeObject(res);
+                            objectOut.flush();
                         } else if (comando.equals("UNIRSEASALA")) {
                             String codigo = partes[1];
                             String nombre = partes[2];
@@ -249,13 +240,12 @@ public class SocketServidor {
                             if (jugador != null) {
                                 Sala sala = unirseSala(codigo, jugador);
                                 try {
-                                    enviarBroadcast("UNION");
                                     notificarObservadores("SALA_ACTUALIZADA");
                                     ObjectOutputStream objectOut = new ObjectOutputStream(clientSocket.getOutputStream());
                                     objectOut.writeObject(sala);
                                     objectOut.flush();
                                 } catch (IOException e) {
-                                    e.printStackTrace(); // Maneja la excepción de manera adecuada en tu código
+                                    e.printStackTrace();
                                 }
                             } else {
                                 System.out.println("El jugador no existe");
@@ -272,34 +262,37 @@ public class SocketServidor {
                             if (jugador != null) {
                                 Sala sala = unirsePublica(jugador);
                                 try {
-                                    enviarBroadcast("UNION");
                                     notificarObservadores("SALA_ACTUALIZADA");
                                     ObjectOutputStream objectOut = new ObjectOutputStream(clientSocket.getOutputStream());
                                     objectOut.writeObject(sala);
                                     objectOut.flush();
                                 } catch (IOException e) {
-                                    e.printStackTrace(); // Maneja la excepción de manera adecuada en tu código
+                                    e.printStackTrace();
                                 }
                             } else {
                                 System.out.println("El jugador no existe");
                             }
                         } else if (comando.equals("CREARSALA")) {
-                            String tipo = partes[1];
-                            String nombre = partes[2];
+                            String nombre = partes[1];
+                            String tipo = partes[2];
                             Sala sala = null;
                             if (tipo.equals("PUBLICA")) {
                                 sala = fachada.crearSala(true);
+                                System.out.println("publica");
                             } else {
                                 sala = fachada.crearSala(false);
+                                System.out.println("privada");
                             }
                             Jugador jugador = null;
                             for (Jugador j : jugadores) {
                                 if (j.getUsuario().equals(nombre)) {
                                     jugador = j;
+                                    System.out.println("encontrado");
                                     break;
                                 }
                             }
                             if (sala != null && jugador != null) {
+                                System.out.println("creada");
                                 if (sala.añadirJugador(jugador)) {
                                     salas.add(sala);
                                     try {
@@ -307,7 +300,7 @@ public class SocketServidor {
                                         objectOut.writeObject(sala);
                                         objectOut.flush();
                                     } catch (IOException e) {
-                                        e.printStackTrace(); // Maneja la excepción de manera adecuada en tu código
+                                        e.printStackTrace();
                                     }
                                 } else {
                                     System.out.println("El jugador ya se encuentra en la sala");
@@ -327,7 +320,6 @@ public class SocketServidor {
                             for (int i = 0; i < salas.size(); i++) {
                                 if (salas.get(i).getJugadores().contains(jugador)) {
                                     salas.get(i).eliminarJugador(jugador);
-                                    enviarBroadcast("ELIMINACION");
                                     notificarObservadores("SALA_ACTUALIZADA");
                                     ObjectOutputStream objectOut = new ObjectOutputStream(clientSocket.getOutputStream());
                                     objectOut.writeObject(salas.get(i));
@@ -346,7 +338,6 @@ public class SocketServidor {
                             for (int i = 0; i < salas.size(); i++) {
                                 if (salas.get(i).getJugadores().contains(jugador)) {
                                     salas.get(i).listo(jugador);
-                                    enviarBroadcast("LISTO");
                                     notificarObservadores("SALA_ACTUALIZADA");
                                     ObjectOutputStream objectOut = new ObjectOutputStream(clientSocket.getOutputStream());
                                     objectOut.writeObject(salas.get(i));
@@ -374,17 +365,16 @@ public class SocketServidor {
                                             partidas.get(i).getTablero().setTablero(campo.getTablero());
                                             partidas.get(i).setCuadrosLlenos(partidas.get(i).getCuadrosLlenos() + campo.getCuadrosCambiados());
 
-                                        }else{
-                                            campo=new TableroDTO();
+                                        } else {
+                                            campo = new TableroDTO();
                                             campo.setTablero(partidas.get(i).getTablero().getTablero());
                                         }
-                                        enviarBroadcast("MOVIMIENTO");
                                         notificarObservadores("PARTIDA_ACTUALIZADA");
                                         ObjectOutputStream objectOut = new ObjectOutputStream(clientSocket.getOutputStream());
                                         objectOut.writeObject(campo);
                                         objectOut.flush();
-                                    }else{
-                                        TableroDTO campo =null;
+                                    } else {
+                                        TableroDTO campo = null;
                                         ObjectOutputStream objectOut = new ObjectOutputStream(clientSocket.getOutputStream());
                                         objectOut.writeObject(campo);
                                         objectOut.flush();
@@ -400,18 +390,23 @@ public class SocketServidor {
                                     break;
                                 }
                             }
-                            for (int i = 0; i < salas.size(); i++) {
-                                if (salas.get(i).getJugadores().contains(jugador)) {
-                                    for (int j = 0; j < partidas.size(); j++) {
-                                        if (partidas.get(j).getDatos().equals(salas.get(i))) {
-                                            partidas.remove(j);
-                                            break;
+                            if (jugador != null) {
+                                for (int i = 0; i < salas.size(); i++) {
+                                    List<Jugador> js = salas.get(i).getJugadores();
+                                    for (int j = 0; j < js.size(); j++) {
+                                        if (js.get(j).getUsuario().equals(jugador.getUsuario())) {
+                                            for (int k = 0; k < partidas.size(); k++) {
+                                                if (partidas.get(k).getDatos().getJugadores() == js) {
+                                                    partidas.remove(k);
+                                                    salas.remove(i);
+                                                    return;
+                                                }
+                                            }
                                         }
                                     }
-                                    salas.remove(i);
-                                    break;
                                 }
                             }
+
                         } else if (comando.equals("SALAACTUALIZADA")) {
                             String nombre = partes[1];
                             Sala sala = obtenerActualizada(nombre);
@@ -425,10 +420,9 @@ public class SocketServidor {
                             objectOut.writeObject(partida);
                             objectOut.flush();
                         } else if (comando.equals("INICIARJUEGO")) {
-                            String nombre=partes[1];
-                            Sala datos=obtenerActualizada(nombre);
-                            
-                            CtrlJuego ctrlJuego=new CtrlJuego();
+                            String nombre = partes[1];
+                            Sala datos = obtenerActualizada(nombre);
+                            CtrlJuego ctrlJuego = new CtrlJuego();
                             char[][] tablero = ctrlJuego.obtenerTablero(datos.getJugadores().size());
                             Tablero campo = new Tablero();
                             campo.setTablero(tablero);
@@ -446,12 +440,8 @@ public class SocketServidor {
                             Collections.shuffle(datos.getJugadores());
                             Partida partida = new Partida(datos, campo, 0);
                             partidas.add(partida);
-                            ObjectOutputStream objectOut = new ObjectOutputStream(clientSocket.getOutputStream());
-                            objectOut.writeObject(partida);
-                            objectOut.flush();
                         }
 
-                        // Puedes extender esto según tus necesidades
                     } else {
                         System.out.println("Mensaje sin comandos recibido del cliente.");
                     }
@@ -481,5 +471,9 @@ public class SocketServidor {
 
     public void agregarObservador(ServidorObserver observador) {
         observadores.add(observador);
+    }
+
+    public void eliminarObservador(ServidorObserver observador) {
+        observadores.remove(observador);
     }
 }
