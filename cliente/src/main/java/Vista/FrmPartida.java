@@ -14,7 +14,7 @@ import Modelo.Partida;
 import Modelo.Sala;
 import Modelo.Tablero;
 import Modelo.TableroPanel;
-import PipesAndFilters.InterfazObserver;
+import Observer.InterfazObserver;
 import SocketCliente.SocketCliente;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -352,23 +352,6 @@ public class FrmPartida extends javax.swing.JFrame implements InterfazObserver {
         // Agregar el TableroPanel al pnlTablero
         pnlTablero.setLayout(new BorderLayout());
         pnlTablero.add(tableroPanel, BorderLayout.CENTER);
-
-//        pnlTablero.addMouseListener(new java.awt.event.MouseAdapter() {
-//            @Override
-//            public void mouseClicked(java.awt.event.MouseEvent evt) {
-//                // Obtener las coordenadas del clic
-//                int x = evt.getX();
-//                int y = evt.getY();
-//
-//                // Calcular las coordenadas en la matriz según el tamaño del tablero y la posición del clic
-//                int fila = (y * tablero.length) / pnlTablero.getHeight();
-//                int columna = (x * tablero[0].length) / pnlTablero.getWidth();
-//
-//                hacerMovimiento(fila, columna);
-//                // Mostrar las coordenadas en la consola (puedes adaptar esto según tus necesidades)
-//                System.out.println("Coordenadas del clic: (" + fila + ", " + columna + ")");
-//            }
-//        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

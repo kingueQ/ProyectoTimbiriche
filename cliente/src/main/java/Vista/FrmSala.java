@@ -10,7 +10,7 @@ import Controlador.CtrlVistas;
 import Modelo.Jugador;
 import Modelo.Partida;
 import Modelo.Sala;
-import PipesAndFilters.InterfazObserver;
+import Observer.InterfazObserver;
 import SocketCliente.SocketCliente;
 import java.awt.Color;
 import java.awt.Component;

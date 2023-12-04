@@ -9,6 +9,7 @@ import java.awt.Graphics;
 
 public class TableroPanel extends javax.swing.JPanel {
     private char[][] matrizTablero;
+    private Color colorJugador;
 
     public TableroPanel(char[][] matrizTablero) {
         System.out.println("Ancho TableroPanel: " + getWidth());
@@ -16,6 +17,10 @@ public class TableroPanel extends javax.swing.JPanel {
         this.matrizTablero = matrizTablero;
     }
 
+    public void setColorJugador(Color colorJugador) {
+        this.colorJugador = colorJugador;
+    }
+    
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);

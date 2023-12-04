@@ -13,7 +13,7 @@ import Modelo.Jugador;
 import Modelo.Partida;
 import Modelo.Sala;
 import Modelo.Tablero;
-import PipesAndFilters.ServidorObserver;
+import Observer.ServidorObserver;
 import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.IOException;
