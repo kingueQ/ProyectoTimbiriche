@@ -5,11 +5,13 @@
  */
 package DominioDTO;
 
+import java.io.Serializable;
+
 /**
  *
  * @author kingu
  */
-public class TableroDTO {
+public class TableroDTO implements Serializable{
     private int cuadrosCambiados=0;
     private char[][] tablero;
 

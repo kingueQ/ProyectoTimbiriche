@@ -7,6 +7,7 @@ package Controlador;
 
 import DominioDTO.TableroDTO;
 import Modelo.Jugador;
+import Modelo.Modelo;
 import Modelo.Sala;
 import Modelo.Tablero;
 import SocketServidor.SocketServidor;
@@ -20,8 +21,13 @@ import java.util.List;
 public class CtrlServidor {
     private List<String> nombresUsuarios = new ArrayList<>();
     private List<Sala> salas = new ArrayList<>();
+    Modelo modelo;
     
     SocketServidor servidor;
+    
+    public CtrlServidor(){
+        modelo=new Modelo();
+    }
     
     public CtrlServidor(SocketServidor servidor){
         this.servidor=servidor;
@@ -58,4 +64,14 @@ public class CtrlServidor {
     public TableroDTO verificarCuadro(Jugador jugador, Tablero tablero){
         return this.servidor.verificarCuadro(jugador, tablero);
     }
+    
+    public Sala crearPublica(){
+        return modelo.crearSalaPublica();
+    }
+    
+    public Sala crearPrivada(){
+        return modelo.crearSalaPrivada();
+    }
+    
+    
 }

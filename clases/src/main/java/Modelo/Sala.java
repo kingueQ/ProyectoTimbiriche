@@ -5,6 +5,7 @@
  */
 package Modelo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +13,7 @@ import java.util.List;
  *
  * @author kingu
  */
-public class Sala {
+public class Sala implements Serializable{
 
     private String codigo;
     private List<Jugador> jugadores;

@@ -14,6 +14,7 @@ import Modelo.Partida;
 import Modelo.Sala;
 import Modelo.Tablero;
 import Modelo.TableroPanel;
+import PipesAndFilters.InterfazObserver;
 import SocketCliente.SocketCliente;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -28,7 +29,7 @@ import javax.swing.JOptionPane;
  *
  * @author kingu
  */
-public class FrmPartida extends javax.swing.JFrame {
+public class FrmPartida extends javax.swing.JFrame implements InterfazObserver {
 
     CtrlJuego ctrlJuego = new CtrlJuego();
     List<Jugador> jugadores;
@@ -39,33 +40,18 @@ public class FrmPartida extends javax.swing.JFrame {
     Sala datos;
     Partida partida;
     TableroPanel tableroPanel;
+
     /**
      * Creates new form Partida
      */
     public FrmPartida(Sala datos, SocketCliente socketCliente, CtrlServidor ctrlServidor) {
-        this.datos=datos;
-        this.jugadores=datos.getJugadores();
         this.socketCliente = socketCliente;
         this.ctrlServidor = ctrlServidor;
-        char[][] tablero = ctrlJuego.obtenerTablero(jugadores.size());
-        Tablero campo=new Tablero();
-        campo.setTablero(tablero);
-        if(jugadores.size()==2){
-            campo.setTotalCuadros(81);
-            campo.setTamanio(10);
-        }else if(jugadores.size()==3){
-            campo.setTotalCuadros(361);
-            campo.setTamanio(20);
-        }else{
-            campo.setTotalCuadros(1521);
-            campo.setTamanio(40);
-        }
-        campo.setNumJugadores(jugadores.size());
-        partida=new Partida(this.datos, campo, 0);
+        this.partida = this.socketCliente.obtenerPartida();
         initComponents();
 
         this.getContentPane().setBackground(Color.BLACK);
-        tableroPanel = new TableroPanel(tablero);
+        tableroPanel = new TableroPanel(this.partida.getTablero().getTablero());
         tableroPanel.setOpaque(false);  // Hacer que el panel sea transparente
 
         // Agregar el TableroPanel al pnlTablero
@@ -80,8 +66,8 @@ public class FrmPartida extends javax.swing.JFrame {
                 int y = evt.getY();
 
                 // Calcular las coordenadas en la matriz según el tamaño del tablero y la posición del clic
-                int fila = (y * tablero.length) / pnlTablero.getHeight();
-                int columna = (x * tablero[0].length) / pnlTablero.getWidth();
+                int fila = (y * partida.getTablero().getTablero().length) / pnlTablero.getHeight();
+                int columna = (x * partida.getTablero().getTablero()[0].length) / pnlTablero.getWidth();
 
                 hacerMovimiento(fila, columna);
                 // Mostrar las coordenadas en la consola (puedes adaptar esto según tus necesidades)
@@ -332,42 +318,37 @@ public class FrmPartida extends javax.swing.JFrame {
         lblJugadorActual.setText(jugadorActual.getUsuario());
         lblJugadorActual.setForeground(jugadorActual.getColor());
     }
-    
-    public void hacerMovimiento(int fila, int columna){
-        Tablero nuevo=this.ctrlServidor.validarLinea(fila, columna, this.partida.getTablero());
-        if(nuevo!=null){
-            this.partida.setTablero(nuevo);
-            TableroDTO nuevo2=this.ctrlServidor.verificarCuadro(this.jugadorActual, partida.getTablero());
-            if(nuevo2!=null){
-                this.partida.getTablero().setTablero(nuevo2.getTablero());
-                this.partida.setCuadrosLlenos(this.partida.getCuadrosLlenos()+nuevo2.getCuadrosCambiados());
-                this.jugadores.get(indiceTurnoActual).setPuntuacion(this.jugadorActual.getPuntuacion()+nuevo2.getCuadrosCambiados());
-                this.jugadorActual=this.jugadores.get(indiceTurnoActual);
-                this.actualizarTablero(partida.getTablero());
-                if(this.partida.getCuadrosLlenos()==this.partida.getTablero().getTotalCuadros()){
-                    JOptionPane.showMessageDialog(this, "El juego ha terminado");
-                    CtrlVistas ctrl=new CtrlVistas();
-                    ctrl.finJuego(this.socketCliente, ctrlServidor, this.jugadores);
-                    this.setVisible(false);
-                    this.dispose();
-                }else{
-                    JOptionPane.showMessageDialog(this, "Haz creado un cuadro, es tu turno nuevamente " + this.jugadorActual.getUsuario());
-                }
-            }else{
-                this.actualizarTablero(partida.getTablero());
+
+    public void hacerMovimiento(int fila, int columna) {
+        TableroDTO nuevo2 = this.socketCliente.hacerMovimiento(fila, columna, this.socketCliente.getJugador().getUsuario());
+        if (nuevo2 != null) {
+            this.partida.getTablero().setTablero(nuevo2.getTablero());
+            this.partida.setCuadrosLlenos(this.partida.getCuadrosLlenos() + nuevo2.getCuadrosCambiados());
+            this.jugadores.get(indiceTurnoActual).setPuntuacion(this.jugadorActual.getPuntuacion() + nuevo2.getCuadrosCambiados());
+            if(nuevo2.getCuadrosCambiados()==0){
                 this.siguienteTurno();
+            }else{
+                this.jugadorActual = this.jugadores.get(indiceTurnoActual);
             }
-        }else{
-            JOptionPane.showMessageDialog(this, "Ese movimiento es inválido, intenta de nuevo");
+            this.actualizarTablero(partida.getTablero());
+            if (this.partida.getCuadrosLlenos() == this.partida.getTablero().getTotalCuadros()) {
+                JOptionPane.showMessageDialog(this, "El juego ha terminado");
+                CtrlVistas ctrl = new CtrlVistas();
+                ctrl.finJuego(this.socketCliente, ctrlServidor, this.partida.getDatos().getJugadores());
+                this.setVisible(false);
+                this.dispose();
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "El movimiento es inválido, intenta de nuevo");
         }
     }
-    
-    public void actualizarTablero(Tablero tablero1){
+
+    public void actualizarTablero(Tablero tablero1) {
         this.cargarJugadores();
         this.lblCuadros.setText(this.partida.getCuadrosLlenos() + "/" + this.partida.getTablero().getTotalCuadros());
-        
-        char[][] tablero=tablero1.getTablero();
-        tableroPanel=new TableroPanel(tablero);
+
+        char[][] tablero = tablero1.getTablero();
+        tableroPanel = new TableroPanel(tablero);
         tableroPanel.setOpaque(false);  // Hacer que el panel sea transparente
 
         // Agregar el TableroPanel al pnlTablero
@@ -413,4 +394,12 @@ public class FrmPartida extends javax.swing.JFrame {
     private javax.swing.JLabel lblPuntos4;
     private javax.swing.JPanel pnlTablero;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void actualizar(String mensaje) {
+        if (mensaje.equals("PARTIDA_ACTUALIZADA")) {
+            this.partida = this.socketCliente.obtenerPartida();
+            this.actualizarTablero(partida.getTablero());
+        }
+    }
 }

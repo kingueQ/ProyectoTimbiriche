@@ -10,6 +10,7 @@ import Controlador.CtrlVistas;
 import Modelo.Jugador;
 import Modelo.Partida;
 import Modelo.Sala;
+import PipesAndFilters.InterfazObserver;
 import SocketCliente.SocketCliente;
 import java.awt.Color;
 import java.awt.Component;
@@ -25,7 +26,7 @@ import javax.swing.table.DefaultTableCellRenderer;
  *
  * @author kingu
  */
-public class FrmSala extends javax.swing.JFrame {
+public class FrmSala extends javax.swing.JFrame implements InterfazObserver{
 
     SocketCliente socketCliente;
     Sala sala;
@@ -52,6 +53,8 @@ public class FrmSala extends javax.swing.JFrame {
         tblJugadores.getColumnModel().getColumn(2).setCellRenderer(new ColorRenderer());
 
         tblJugadores.setRowHeight(60);
+        
+        this.socketCliente.agregarObservador(this);
     }
 
     /**
@@ -204,6 +207,14 @@ public class FrmSala extends javax.swing.JFrame {
         this.lblJugadores.setText(jugadores.size() + "/4");
     }
 
+    @Override
+    public void actualizar(String mensaje) {
+        if(mensaje.equals("SALA_ACTUALIZADA")){
+            this.sala=this.socketCliente.obtenerSala();
+            this.actualizarTabla(this.sala.getJugadores());
+        }
+    }
+    
     private static class AvatarRenderer extends DefaultTableCellRenderer {
 
         private static final int ICON_WIDTH = 50; // Ajusta el ancho de la imagen según tus preferencias
