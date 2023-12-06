@@ -6,8 +6,6 @@
 package interfaz;
 
 import Dominio.Jugador;
-import interfaz.SalaEsperaPrivada;
-import interfaz.SalaEsperaPublica;
 import java.awt.Color;
 import java.awt.Dimension;
 import javax.swing.JOptionPane;

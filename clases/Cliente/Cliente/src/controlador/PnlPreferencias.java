@@ -1,7 +1,7 @@
 /**
  * PnlPreferencias.java
  */
-package interfaz;
+package controlador;
 
 import java.awt.Color;
 import javax.swing.JColorChooser;

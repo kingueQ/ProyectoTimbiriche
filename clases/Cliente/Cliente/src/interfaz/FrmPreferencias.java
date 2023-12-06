@@ -3,6 +3,7 @@
  */
 package interfaz;
 
+import controlador.PnlPreferencias;
 import Dominio.Preferencia;
 import java.awt.Color;
 import java.util.ArrayList;

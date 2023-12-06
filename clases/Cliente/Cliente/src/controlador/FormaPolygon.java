@@ -1,7 +1,7 @@
 /**
  * FormaPolygon.java
  */
-package interfaz;
+package controlador;
 
 import Dominio.Forma;
 import java.awt.Color;

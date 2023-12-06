@@ -3,6 +3,9 @@
  */
 package interfaz;
 
+import controlador.PnlObservador;
+import controlador.PnlJugador;
+import controlador.PnlTablero;
 import Dominio.Cuadro;
 import Dominio.FormaJuego;
 import Dominio.Jugador;

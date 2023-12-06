@@ -1,7 +1,7 @@
 /**
  * PnlTablero.java.
  */
-package interfaz;
+package controlador;
 
 import Dominio.Cuadro;
 import Dominio.FormaJuego;

@@ -1,7 +1,7 @@
 /**
  * PnlJugador.java
  */
-package interfaz;
+package controlador;
 
 import Dominio.Jugador;
 import java.awt.Color;

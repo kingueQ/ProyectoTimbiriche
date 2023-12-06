@@ -1,4 +1,4 @@
-package interfaz;
+package controlador;
 
 
 public class Principal {
