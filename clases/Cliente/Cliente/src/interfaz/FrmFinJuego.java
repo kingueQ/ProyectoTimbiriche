@@ -55,6 +55,7 @@ public class FrmFinJuego extends javax.swing.JFrame {
             Image imagenRedimensionada = icono.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
             ImageIcon iconoRedimensionado = new ImageIcon(imagenRedimensionada);
             lblAvatarGanador.setIcon(iconoRedimensionado);
+            lblAvatarGanador.setText("");
         } catch (Exception e) {
             e.printStackTrace(); // Puedes cambiar esto por un manejo más específico de la excepción
         }
@@ -63,6 +64,7 @@ public class FrmFinJuego extends javax.swing.JFrame {
             Image imagenRedimensionada = icono.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
             ImageIcon iconoRedimensionado = new ImageIcon(imagenRedimensionada);
             lblTrofeo.setIcon(iconoRedimensionado);
+            lblTrofeo.setText("");
         } catch (Exception e) {
             e.printStackTrace(); // Puedes cambiar esto por un manejo más específico de la excepción
         }

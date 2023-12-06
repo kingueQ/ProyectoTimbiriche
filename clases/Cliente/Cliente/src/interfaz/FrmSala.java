@@ -382,6 +382,7 @@ public class FrmSala extends javax.swing.JFrame implements PnlObservador, IActua
                         formas.get(i).setJugador(jugador);
                         if (i == 0) {
                             this.pnlTablero.actualizaLineaTablero((Linea) formas.get(i));
+                            this.sala.getMarcador().setSiguiente((this.sala.getMarcador().getSiguiente()+1)%this.sala.getMarcador().getJugadores().size());
                         } else {
                             this.pnlTablero.actualizaCuadroTablero((Cuadro) formas.get(i));
                             int index = this.sala.getMarcador().getJugadores().indexOf(jugador);
