@@ -1,6 +1,9 @@
 package controlador;
 
-
+/**
+ * Clase principal del juego
+ * @author Abraham Quintana y Rafael Soqui
+ */
 public class Principal {
 
     public static void main(String[] args) {

@@ -12,7 +12,7 @@ import java.util.Objects;
 
 /**
  *
- * @author Alejandro Galindo
+ * @author Abraham Quintana y Rafael Soqui
  */
 public class LineaDTO implements Serializable{
     private String posicion;

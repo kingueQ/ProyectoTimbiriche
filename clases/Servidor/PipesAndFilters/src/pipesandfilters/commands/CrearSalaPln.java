@@ -12,7 +12,7 @@ import pipesandfilters.Pipes.PipeTamanio;
 
 /**
  *
- * @author Alejandro Galindo
+ * @author Abraham Quintana y Rafael Soqui
  */
 class CrearSalaPln implements IPAFPipeline{
 

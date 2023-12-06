@@ -13,8 +13,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 /**
- *
- * @author kingu
+ * Clase que muestra las interfaces gráficas
+ * @author Abraham Quintana y Rafael Soqui
  */
 public class Vista {
     private JFrame frame;

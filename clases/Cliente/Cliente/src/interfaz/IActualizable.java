@@ -7,7 +7,7 @@ package interfaz;
 
 /**
  *
- * @author Alejandro Galindo
+ * @author Abraham Quintana y Rafael Soqui
  */
 public interface IActualizable {
     void actualizaDeSocket(Object mensaje);

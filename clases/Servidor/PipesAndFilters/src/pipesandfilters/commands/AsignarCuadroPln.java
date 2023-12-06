@@ -10,7 +10,7 @@ import pipesandfilters.Pipes.PipeCuadroDTO;
 
 /**
  *
- * @author Alejandro Galindo
+ * @author Abraham Quintana y Rafael Soqui
  */
 class AsignarCuadroPln implements IPAFPipeline {
 

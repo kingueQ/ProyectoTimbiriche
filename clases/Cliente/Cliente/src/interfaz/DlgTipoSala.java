@@ -9,7 +9,7 @@ import java.awt.Color;
 
 /**
  *
- * @author kingu
+ * @author Abraham Quintana y Rafael Soqui
  */
 public class DlgTipoSala extends javax.swing.JDialog {
 

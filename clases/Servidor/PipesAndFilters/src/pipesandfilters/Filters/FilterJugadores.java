@@ -13,7 +13,7 @@ import pipesandfilters.Pipes.PipeJugadores;
 
 /**
  *
- * @author Alejandro Galindo
+ * @author Abraham Quintana y Rafael Soqui
  */
 public class FilterJugadores implements Filter<List<JugadorDTO>, List<Jugador>, PipeJugadores>{
 

@@ -7,7 +7,7 @@ package Dominio;
 
 /**
  *
- * @author Alejandro Galindo
+ * @author Abraham Quintana y Rafael Soqui
  */
 public enum Posicion {
     VERTICAL, HORIZONTAL

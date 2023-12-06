@@ -13,7 +13,7 @@ import pipesandfilters.Pipes.PipeLinea;
 
 /**
  *
- * @author Alejandro Galindo
+ * @author Abraham Quintana y Rafael Soqui
  */
 public class FilterLinea implements Filter<LineaDTO, Linea, PipeLinea>{
 

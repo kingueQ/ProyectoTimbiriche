@@ -12,7 +12,7 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author kingu
+ * @author Abraham Quintana y Rafael Soqui
  */
 public class MenuInicial extends javax.swing.JFrame {
 
@@ -92,7 +92,6 @@ public class MenuInicial extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         btnCrear = new javax.swing.JButton();
-        btnUnirse = new javax.swing.JButton();
         btnRegresar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -104,19 +103,10 @@ public class MenuInicial extends javax.swing.JFrame {
 
         btnCrear.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         btnCrear.setForeground(new java.awt.Color(204, 0, 51));
-        btnCrear.setText("Crear Sala");
+        btnCrear.setText("Jugar");
         btnCrear.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCrearActionPerformed(evt);
-            }
-        });
-
-        btnUnirse.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        btnUnirse.setForeground(new java.awt.Color(204, 0, 51));
-        btnUnirse.setText("Unirse a Sala");
-        btnUnirse.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnUnirseActionPerformed(evt);
             }
         });
 
@@ -134,32 +124,29 @@ public class MenuInicial extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(65, 65, 65)
-                .addComponent(btnCrear)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 102, Short.MAX_VALUE)
-                .addComponent(btnUnirse)
-                .addGap(56, 56, 56))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnRegresar)
-                .addGap(172, 172, 172))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(96, 96, 96)
-                .addComponent(jLabel1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(96, 96, 96)
+                        .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(175, 175, 175)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnRegresar)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(13, 13, 13)
+                                .addComponent(btnCrear)))))
+                .addContainerGap(84, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addGap(62, 62, 62)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnCrear)
-                    .addComponent(btnUnirse))
-                .addGap(57, 57, 57)
+                .addGap(61, 61, 61)
+                .addComponent(btnCrear)
+                .addGap(54, 54, 54)
                 .addComponent(btnRegresar)
-                .addContainerGap(96, Short.MAX_VALUE))
+                .addContainerGap(100, Short.MAX_VALUE))
         );
 
         pack();
@@ -181,13 +168,13 @@ public class MenuInicial extends javax.swing.JFrame {
         ip = JOptionPane.showInputDialog(this, "Dirección IP", "¿A donde te quieres conectar?", JOptionPane.OK_CANCEL_OPTION);
         port = JOptionPane.showInputDialog(this, "Puerto", "¿A donde quieres llegar?", JOptionPane.OK_CANCEL_OPTION);
 
-        DlgTipoSala opciones = new DlgTipoSala(this, true);
-        opciones.setVisible(true);
-
-        String tipoSeleccionado = opciones.getTipoSeleccionado();
-
-        if (tipoSeleccionado != null) {
-            if (tipoSeleccionado.equals("Publica")) {
+//        DlgTipoSala opciones = new DlgTipoSala(this, true);
+//        opciones.setVisible(true);
+//
+//        String tipoSeleccionado = opciones.getTipoSeleccionado();
+//
+//        if (tipoSeleccionado != null) {
+//            if (tipoSeleccionado.equals("Publica")) {
                 SalaEsperaPublica se = SalaEsperaPublica.crear();
                 if (se.ejecutarConexion(jugador, ip, Integer.valueOf(port))) {
                     se.setVisible(true);
@@ -196,69 +183,25 @@ public class MenuInicial extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(this, "No se pudo realizar la conexión con el servidor", "Fallo de Conexión", JOptionPane.ERROR_MESSAGE);
                     se = null;
                 }
-            } else {
-                SalaEsperaPrivada se = SalaEsperaPrivada.crear();
-                if (se.ejecutarConexion(jugador, ip, Integer.valueOf(port))) {
-                    se.setVisible(true);
-                    this.dispose();
-                } else {
-                    JOptionPane.showMessageDialog(this, "No se pudo realizar la conexión con el servidor", "Fallo de Conexión", JOptionPane.ERROR_MESSAGE);
-                    se = null;
-                }
-            }
-        } else {
-            System.out.println("Cerró el diálogo sin seleccionar nada.");
-        }
+//            } else {
+//                SalaEsperaPrivada se = SalaEsperaPrivada.crear();
+//                if (se.ejecutarConexion(jugador, ip, Integer.valueOf(port))) {
+//                    se.setVisible(true);
+//                    this.dispose();
+//                } else {
+//                    JOptionPane.showMessageDialog(this, "No se pudo realizar la conexión con el servidor", "Fallo de Conexión", JOptionPane.ERROR_MESSAGE);
+//                    se = null;
+//                }
+//            }
+//        } else {
+//            System.out.println("Cerró el diálogo sin seleccionar nada.");
+//        }
     }//GEN-LAST:event_btnCrearActionPerformed
-
-    private void btnUnirseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUnirseActionPerformed
-        String ip = null, port = null;
-
-        ip = JOptionPane.showInputDialog(this, "Dirección IP", "¿A donde te quieres conectar?", JOptionPane.OK_CANCEL_OPTION);
-        port = JOptionPane.showInputDialog(this, "Puerto", "¿A donde quieres llegar?", JOptionPane.OK_CANCEL_OPTION);
-
-        DlgOpciones opciones = new DlgOpciones(this, true);
-        opciones.setVisible(true);
-
-        String tipoSeleccionado = opciones.getTipoSeleccionado();
-
-        if (tipoSeleccionado != null) {
-            if (tipoSeleccionado.equals("Publica")) {
-                SalaEsperaPublica se = SalaEsperaPublica.unirse();
-                if (se != null && se.ejecutarConexion(jugador, ip, Integer.valueOf(port))) {
-                    se.setVisible(true);
-                    this.dispose();
-                } else {
-                    JOptionPane.showMessageDialog(this, "No se pudo realizar la conexión con el servidor", "Fallo de Conexión", JOptionPane.ERROR_MESSAGE);
-                    se = null;
-                }
-            } else {
-                DlgCodigo dlgCodigo = new DlgCodigo(this, true);
-                dlgCodigo.setVisible(true);
-
-                String codigo = dlgCodigo.getTipoSeleccionado();
-
-                if (codigo != null) {
-                    SalaEsperaPrivada se = SalaEsperaPrivada.unirse(codigo);
-                    if (se!=null&&se.ejecutarConexion(jugador, ip, Integer.valueOf(port))) {
-                        se.setVisible(true);
-                        this.dispose();
-                    } else {
-                        JOptionPane.showMessageDialog(this, "No se pudo realizar la conexión con el servidor", "Fallo de Conexión", JOptionPane.ERROR_MESSAGE);
-                        se = null;
-                    }
-                }
-            }
-        } else {
-            System.out.println("Cerró el diálogo sin seleccionar nada.");
-        }
-    }//GEN-LAST:event_btnUnirseActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCrear;
     private javax.swing.JButton btnRegresar;
-    private javax.swing.JButton btnUnirse;
     private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
 }

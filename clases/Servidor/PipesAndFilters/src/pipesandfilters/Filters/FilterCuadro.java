@@ -13,7 +13,7 @@ import pipesandfilters.Pipes.PipeCuadro;
 
 /**
  *
- * @author Alejandro Galindo
+ * @author Abraham Quintana y Rafael Soqui
  */
 public class FilterCuadro implements Filter<CuadroDTO, Cuadro, PipeCuadro>{
 

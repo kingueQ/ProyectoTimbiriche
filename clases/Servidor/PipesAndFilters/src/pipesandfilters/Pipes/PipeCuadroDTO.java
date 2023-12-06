@@ -10,7 +10,7 @@ import pipesandfilters.Filters.FilterCuadro;
 
 /**
  *
- * @author Alejandro Galindo
+ * @author Abraham Quintana y Rafael Soqui
  */
 public class PipeCuadroDTO implements Pipe<CuadroDTO, FilterCuadro>{
 

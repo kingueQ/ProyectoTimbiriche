@@ -10,7 +10,7 @@ import java.util.List;
 
 /**
  *
- * @author Alejandro Galindo
+ * @author Abraham Quintana y Rafael Soqui
  */
 public interface PnlObservador {
     void actualiza(List<FormaJuego> movimiento);

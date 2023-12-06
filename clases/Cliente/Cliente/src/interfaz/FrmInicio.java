@@ -10,7 +10,7 @@ import java.awt.Color;
  */
 /**
  *
- * @author kingu
+ * @author Abraham Quintana y Rafael Soqui
  */
 public class FrmInicio extends javax.swing.JFrame {
 

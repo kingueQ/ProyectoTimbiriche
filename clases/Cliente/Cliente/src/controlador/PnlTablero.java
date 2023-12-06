@@ -22,8 +22,8 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 /**
- *
- * @author Alejandro Galindo, Francisco Felix
+ * Clase que despliega el tablero
+ * @author Abraham Quintana y Rafael Soqui
  */
 public class PnlTablero extends javax.swing.JPanel implements PnlObservable, MouseListener, MouseMotionListener {
 

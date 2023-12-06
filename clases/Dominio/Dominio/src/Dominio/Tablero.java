@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  *
- * @author Alejandro Galindo, Francisco Felix
+ * @author Abraham Quintana y Rafael Soqui
  */
 public class Tablero {
 

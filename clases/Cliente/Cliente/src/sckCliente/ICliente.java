@@ -9,7 +9,7 @@ import interfaz.IActualizable;
 
 /**
  *
- * @author Alejandro Galindo
+ * @author Abraham Quintana y Rafael Soqui
  */
 public interface ICliente { 
     boolean conectarAlServidor(String address, int port);

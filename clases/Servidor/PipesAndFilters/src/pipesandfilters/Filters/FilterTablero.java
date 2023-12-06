@@ -10,7 +10,7 @@ import pipesandfilters.Pipes.PipeTablero;
 
 /**
  *
- * @author Alejandro Galindo
+ * @author Abraham Quintana y Rafael Soqui
  */
 public class FilterTablero implements Filter<Integer, Tablero, PipeTablero>{
 

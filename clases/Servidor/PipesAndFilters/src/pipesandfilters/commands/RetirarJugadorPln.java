@@ -10,7 +10,7 @@ import pipesandfilters.Pipes.PipeJugadorDTO;
 
 /**
  *
- * @author Alejandro Galindo
+ * @author Abraham Quintana y Rafael Soqui
  */
 class RetirarJugadorPln implements IPAFPipeline {
     

@@ -10,7 +10,7 @@ import pipesandfilters.Pipes.PipeLineaDTO;
 
 /**
  *
- * @author Alejandro Galindo
+ * @author Abraham Quintana y Rafael Soqui
  */
 class AsignarLineaPln implements IPAFPipeline{
     

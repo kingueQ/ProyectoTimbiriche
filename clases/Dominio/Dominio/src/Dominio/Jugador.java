@@ -7,7 +7,7 @@ import java.util.Objects;
 
 /**
  *
- * @author Alejandro Galindo, Francisco Felix
+ * @author Abraham Quintana y Rafael Soqui
  */
 public class Jugador {
     private String nombre;

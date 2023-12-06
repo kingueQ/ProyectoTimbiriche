@@ -10,7 +10,7 @@ import pipesandfilters.SinkRepo;
 
 /**
  *
- * @author Alejandro Galindo
+ * @author Abraham Quintana y Rafael Soqui
  */
 public class PipeJugador implements Pipe<Jugador, SinkRepo> {
 

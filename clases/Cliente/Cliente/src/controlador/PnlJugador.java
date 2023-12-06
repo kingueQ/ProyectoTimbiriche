@@ -12,7 +12,7 @@ import javax.swing.ImageIcon;
 /**
  * JPanel que despliega la informacion de un jugador.
  *
- * @author Alejandro Galindo, Francisco Félix
+ * @author Abraham Quintana y Rafael Soqui
  */
 public class PnlJugador extends javax.swing.JPanel {
 

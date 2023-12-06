@@ -7,7 +7,7 @@ package pipesandfilters.commands;
 
 /**
  *
- * @author Alejandro Galindo
+ * @author Abraham Quintana y Rafael Soqui
  */
 interface IPAFPipeline {
     void ejecutar();

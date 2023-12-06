@@ -8,8 +8,8 @@ import javax.swing.JColorChooser;
 import javax.swing.JPanel;
 
 /**
- *
- * @author Alejandro Galindo, Francisco Felix
+ * Clase que establece las preferencias de los jugadores como el color
+ * @author Abraham Quintana y Rafael Soqui
  */
 public class PnlPreferencias extends javax.swing.JPanel {
 

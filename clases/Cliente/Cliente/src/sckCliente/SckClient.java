@@ -30,7 +30,7 @@ import interfaz.IActualizable;
 
 /**
  *
- * @author Alejandro Galindo
+ * @author Abraham Quintana y Rafael Soqui
  */
 public class SckClient implements Runnable {
 

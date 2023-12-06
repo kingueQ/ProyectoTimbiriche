@@ -7,7 +7,7 @@ package pipesandfilters.Filters;
 
 /**
  *
- * @author Alejandro Galindo
+ * @author Abraham Quintana y Rafael Soqui
  * @param <I> Entrada
  * @param <O> Salida
  * @param <P> Pipe de salida

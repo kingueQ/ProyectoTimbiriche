@@ -16,7 +16,7 @@ import javax.swing.ImageIcon;
 
 /**
  *
- * @author kingu
+ * @author Abraham Quintana y Rafael Soqui
  */
 public class FrmFinJuego extends javax.swing.JFrame {
 

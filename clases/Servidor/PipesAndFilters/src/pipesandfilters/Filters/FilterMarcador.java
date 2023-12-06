@@ -12,7 +12,7 @@ import pipesandfilters.Pipes.PipeMarcador;
 
 /**
  *
- * @author Alejandro Galindo
+ * @author Abraham Quintana y Rafael Soqui
  */
 public class FilterMarcador implements Filter<List<Jugador>, Marcador, PipeMarcador>{
 

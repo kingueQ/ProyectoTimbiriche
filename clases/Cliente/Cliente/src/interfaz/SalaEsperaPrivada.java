@@ -16,7 +16,7 @@ import sckCliente.ICliente;
 
 /**
  *
- * @author Alejandro Galindo
+ * @author Abraham Quintana y Rafael Soqui
  */
 public class SalaEsperaPrivada extends javax.swing.JFrame implements IActualizable {
 

@@ -12,7 +12,7 @@ import java.awt.Polygon;
  * Clase que renderiza una Forma en PnlTablero segun su posicion, tamanio y
  * quien hizo la linea.
  * 
- * @author 
+ * @author Abraham Quintana y Rafael Soqui
  */
 public class FormaPolygon{
     private Forma forma;

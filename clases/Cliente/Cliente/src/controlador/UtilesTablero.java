@@ -14,8 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
- * @author Alejandro Galindo, Francisco Felix
+ * Clase que genera los puntos del tablero
+ * @author Abraham Quintana y Rafael Soqui
  */
 public class UtilesTablero {
 

@@ -9,8 +9,8 @@ import java.awt.Color;
 import javax.swing.JOptionPane;
 
 /**
- *
- * @author kingu
+ * Clase que obtiene el codigo de la sala
+ * @author Abraham Quintana y Rafael Soqui
  */
 public class DlgCodigo extends javax.swing.JDialog {
 

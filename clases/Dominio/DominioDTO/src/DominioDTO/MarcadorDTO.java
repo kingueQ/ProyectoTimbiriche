@@ -10,7 +10,7 @@ import java.util.List;
 
 /**
  *
- * @author Alejandro Galindo
+ * @author Abraham Quintana y Rafael Soqui
  */
 public class MarcadorDTO implements Serializable{
     private List<JugadorDTO> jugadores;

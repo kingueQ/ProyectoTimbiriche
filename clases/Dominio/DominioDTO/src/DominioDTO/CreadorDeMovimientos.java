@@ -7,7 +7,7 @@ package DominioDTO;
 
 /**
  *
- * @author Alejandro Galindo
+ * @author Abraham Quintana y Rafael Soqui
  */
 public abstract class CreadorDeMovimientos {
     protected MovimientoDTO movimiento;

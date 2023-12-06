@@ -21,7 +21,7 @@ import sckCliente.ICliente;
 
 /**
  *
- * @author Alejandro Galindo, Francisco Felix
+ * @author Abraham Quintana y Rafael Soqui
  */
 public class FrmSala extends javax.swing.JFrame implements PnlObservador, IActualizable {
 

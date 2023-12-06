@@ -10,7 +10,7 @@ import pipesandfilters.Filters.FilterLinea;
 
 /**
  *
- * @author Alejandro Galindo
+ * @author Abraham Quintana y Rafael Soqui
  */
 public class PipeLineaDTO implements Pipe<LineaDTO, FilterLinea>{
 
