@@ -1,0 +1,3 @@
+presentacion.inicio.FrmPreferencias$1
+presentacion.inicio.FrmPreferencias
+presentacion.inicio.FrmPreferencias$2
